@@ -1,0 +1,8 @@
+services:
+  cex-trading-bot-app:
+    build: .
+    container_name: cex-trading-bot
+    restart: unless-stopped
+    environment:
+      - CEX_API_KEY=${CEX_API_KEY}
+      - CEX_API_SECRET=${CEX_API_SECRET}
