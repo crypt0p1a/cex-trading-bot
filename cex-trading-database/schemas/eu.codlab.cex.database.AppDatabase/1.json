@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "848acbe123f8784c48a963f3861dfb8c",
+    "identityHash": "af438db8b21760ebd61d30aa783b5d19",
     "entities": [
       {
         "tableName": "Tick",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `exchange` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `left` TEXT NOT NULL, `right` TEXT NOT NULL, `low` TEXT NOT NULL, `high` TEXT NOT NULL, `last` TEXT NOT NULL, `bestBid` TEXT NOT NULL, `bestAsk` TEXT NOT NULL, `bestBidChange` TEXT NOT NULL, `bestBidChangePercentage` REAL NOT NULL, `bestAskChange` TEXT NOT NULL, `bestAskChangePercentage` REAL NOT NULL, `volume` TEXT NOT NULL, `volume30d` TEXT NOT NULL, `quoteVolume` TEXT NOT NULL, `lastTradeVolume` TEXT NOT NULL, `lastTradePrice` TEXT NOT NULL, `priceChange` TEXT NOT NULL, `priceChangePercentage` REAL NOT NULL, `lastTradeDateISO` TEXT NOT NULL, `volumeUSD` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `exchange` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `left` TEXT NOT NULL, `right` TEXT NOT NULL, `low` TEXT NOT NULL, `high` TEXT NOT NULL, `last` TEXT NOT NULL, `bestBid` TEXT NOT NULL, `bestAsk` TEXT NOT NULL, `bestBidChange` TEXT NOT NULL, `bestBidChangePercentage` REAL NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -79,72 +79,6 @@
             "columnName": "bestBidChangePercentage",
             "affinity": "REAL",
             "notNull": true
-          },
-          {
-            "fieldPath": "bestAskChange",
-            "columnName": "bestAskChange",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "bestAskChangePercentage",
-            "columnName": "bestAskChangePercentage",
-            "affinity": "REAL",
-            "notNull": true
-          },
-          {
-            "fieldPath": "volume",
-            "columnName": "volume",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "volume30d",
-            "columnName": "volume30d",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "quoteVolume",
-            "columnName": "quoteVolume",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "lastTradeVolume",
-            "columnName": "lastTradeVolume",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "lastTradePrice",
-            "columnName": "lastTradePrice",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "priceChange",
-            "columnName": "priceChange",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "priceChangePercentage",
-            "columnName": "priceChangePercentage",
-            "affinity": "REAL",
-            "notNull": true
-          },
-          {
-            "fieldPath": "lastTradeDateISO",
-            "columnName": "lastTradeDateISO",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "volumeUSD",
-            "columnName": "volumeUSD",
-            "affinity": "TEXT",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -157,7 +91,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '848acbe123f8784c48a963f3861dfb8c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'af438db8b21760ebd61d30aa783b5d19')"
     ]
   }
 }

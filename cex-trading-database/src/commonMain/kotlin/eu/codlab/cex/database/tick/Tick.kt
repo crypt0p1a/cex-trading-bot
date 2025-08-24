@@ -31,10 +31,12 @@ data class Tick(
     val bestAsk: BigDecimal,
     @Serializable(with = BigDecimalSerializer::class)
     val bestBidChange: BigDecimal,
-    val bestBidChangePercentage: Double,
+    @Serializable(with = BigDecimalSerializer::class)
+    val bestBidChangePercentage: BigDecimal,
     @Serializable(with = BigDecimalSerializer::class)
     val bestAskChange: BigDecimal,
-    val bestAskChangePercentage: Double,
+    @Serializable(with = BigDecimalSerializer::class)
+    val bestAskChangePercentage: BigDecimal,
     @Serializable(with = BigDecimalSerializer::class)
     val volume: BigDecimal,
     @Serializable(with = BigDecimalSerializer::class)
@@ -47,7 +49,8 @@ data class Tick(
     val lastTradePrice: BigDecimal,
     @Serializable(with = BigDecimalSerializer::class)
     val priceChange: BigDecimal,
-    val priceChangePercentage: Double,
+    @Serializable(with = BigDecimalSerializer::class)
+    val priceChangePercentage: BigDecimal,
     val lastTradeDateISO: String,
     @Serializable(with = BigDecimalSerializer::class)
     val volumeUSD: BigDecimal,
