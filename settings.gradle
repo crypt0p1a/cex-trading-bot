@@ -1,0 +1,30 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
+ext.GRADLE_EXTENDED_VERSION_USED = "b48a13304"
+
+apply from: "https://raw.githubusercontent.com/the-inkwell/gradle-tools/${ext.GRADLE_EXTENDED_VERSION_USED}/extended.gradle"
+
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        mavenLocal()
+    }
+    versionCatalogs {
+        additionals {
+            from(files(gradle.extended.files.catalog))
+        }
+    }
+}
+
+includeBuild "gradle/extended/${ext.GRADLE_EXTENDED_VERSION_USED}/kt-plugins"
+include(':cex-trading-env')
+include(':cex-trading-database')
+include(':cex-trading-bot')

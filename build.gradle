@@ -1,0 +1,37 @@
+buildscript {
+    apply from: "gradle/versions.gradle"
+    apply from: gradle.extended.files.modules
+
+    dependencies {
+        classpath additionals.nexus.gradlePlugin
+        classpath additionals.sonarqube.gradlePlugin
+        classpath additionals.license.gradlePlugin
+    }
+}
+
+plugins {
+    alias(additionals.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.sentry) apply false
+    alias(additionals.plugins.multiplatform.buildkonfig) apply false
+    alias(additionals.plugins.kotlin.multiplatform) apply false
+    alias(additionals.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.room) apply false
+    alias(additionals.plugins.ksp) apply false
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
+group = ext.groupId
+version = ext.version
+
+subprojects {
+    if (isSourcesModule(it)) {
+        apply from: gradle.extended.files.moduleSetup
+    }
+}

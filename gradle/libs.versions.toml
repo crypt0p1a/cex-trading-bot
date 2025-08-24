@@ -1,0 +1,18 @@
+[versions]
+androidxRoom = "2.7.0"
+sqlite = "2.4.0"
+sentry = "0.7.1"
+cex-spot-trading = "0.0.2"
+bignum = "0.3.10"
+
+[libraries]
+sentry = { module = "io.sentry:sentry-kotlin-multiplatform", version.ref = "sentry" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidxRoom" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidxRoom" }
+sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+cex-spot-trading = { group = "eu.codlab", name = "kotlin-cex-spot-trading", version.ref = "cex-spot-trading" }
+bignum = { group = "com.ionspin.kotlin", name = "bignum", version.ref = "bignum" }
+
+[plugins]
+room = { id = "androidx.room", version.ref = "androidxRoom" }
+sentry = { id = "io.sentry.jvm.gradle", version = "4.7.1" }
