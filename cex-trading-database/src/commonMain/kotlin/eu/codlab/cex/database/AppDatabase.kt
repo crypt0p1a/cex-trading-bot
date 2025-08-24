@@ -1,6 +1,5 @@
 package eu.codlab.cex.database
 
-
 import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
@@ -33,8 +32,6 @@ internal enum class DatabaseMode {
     Normal,
     InMemory
 }
-
-internal expect fun getDatabaseBuilder(mode: DatabaseMode): RoomDatabase.Builder<AppDatabase>
 
 internal fun getDatabase(mode: DatabaseMode) = getDatabaseBuilder(mode)
     // .addMigrations(MIGRATIONS)
