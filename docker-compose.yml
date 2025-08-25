@@ -3,6 +3,11 @@ services:
     build: .
     container_name: cex-trading-bot
     restart: unless-stopped
+    volumes:
+      - tradingdb:/data/tradingdb
     environment:
       - CEX_API_KEY=${CEX_API_KEY}
       - CEX_API_SECRET=${CEX_API_SECRET}
+      - TRADING_DB_PATH=/data/tradingdb
+volumes:
+  tradingdb:
