@@ -1,6 +1,8 @@
 package eu.codlab.cex.database
 
 
+import eu.codlab.cex.database.orders.OrderController
+import eu.codlab.cex.database.orders.OrderControllerImpl
 import eu.codlab.cex.database.tick.TickController
 import eu.codlab.cex.database.tick.TickControllerImpl
 
@@ -19,4 +21,7 @@ object Database {
 
     val ticks: TickController
         get() = TickControllerImpl(database)
+
+    val orders: OrderController
+        get() = OrderControllerImpl(database)
 }
