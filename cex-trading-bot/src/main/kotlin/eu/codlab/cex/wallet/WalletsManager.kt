@@ -18,6 +18,7 @@ class WalletsManager(
         info.balancesPerAccounts.keys.filter { it.isNotBlank() }.forEach {
             val manager = mutableWallets.getOrPut(it) { WalletManager(it, privateApi) }
 
+            manager.tick()
 
             println("wallet $it managed...")
         }
