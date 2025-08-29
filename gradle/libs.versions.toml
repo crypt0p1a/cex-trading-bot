@@ -2,7 +2,7 @@
 androidxRoom = "2.7.0"
 sqlite = "2.4.0"
 sentry = "0.7.1"
-cex-spot-trading = "0.0.2"
+cex-spot-trading = "0.0.4-alpha10"
 bignum = "0.3.10"
 
 [libraries]

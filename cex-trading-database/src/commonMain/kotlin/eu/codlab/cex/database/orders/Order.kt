@@ -8,13 +8,14 @@ import kotlinx.serialization.Serializable
 
 @Entity(
     indices = [
+        Index("orderId"),
+        Index("clientOrderId"),
         Index("accountId"),
         Index("currency1"),
-        Index("currency2"),
-        Index("orderId")
+        Index("currency2")
     ]
 )
-class Order(
+data class Order(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     /**
@@ -45,26 +46,28 @@ class Order(
     val statusIsFinal: Boolean,
     /**
      * Represents first currency in currency pair of this order.
+     * TODO : make it Symbol
      */
     val currency1: String,
     /**
      * Represents second currency in currency pair of this order.
+     * TODO : make it Symbol
      */
     val currency2: String,
     /**
      * Represents side of this order.
      */
-    val side: String,
+    val side: OrderSide,
     /**
      * Represents order type of this order.
      */
-    val orderType: String,
+    val orderType: OrderType,
     /**
      * Represents time in force of this order. For details see "Order TimeInForce" section. This
      * value can be null for orders where time in force is not applied, for example, for Market
      * orders.
      */
-    val timeInForce: String,
+    val timeInForce: TimeInForce? = null,
     /**
      * Text, which was provided by Client during order creation. If value is null, then it means
      * Client did not provide such text during order creation.
@@ -152,13 +155,13 @@ class Order(
      * creation of the order. If this value is null, then it means Client did not provide expire
      * time during order creation.
      */
-    val expireTime: Long,
+    val expireTime: Long? = null,
     /**
      * UTC timestamp in milliseconds. Represents an effective timestamp provided by Client during
      * creation of the order. If this value is null, then it means that Client did not provide
      * effective time during order creation.
      */
-    val effectiveTime: Long,
+    val effectiveTime: Long? = null,
 )
 
 @Serializable

@@ -1,5 +1,8 @@
 package eu.codlab.cex
 
+import korlibs.time.TimeSpan
+import korlibs.time.hours
+
 data class PairConfiguration(
     val left: Symbol,
     val right: Symbol,
@@ -8,7 +11,7 @@ data class PairConfiguration(
     val allowFallbackPrice: Boolean = false,
     val minimumBalanceUsed: Double = 0.0,
     val balanceWeightUsed: Int = 1,
-    val cancelBuyOrderTimeoutMinutes: Int = 1440
+    val cancelBuyOrderTimeout: TimeSpan = 12.hours
 ) {
     val leftRight = "$left-$right"
 }

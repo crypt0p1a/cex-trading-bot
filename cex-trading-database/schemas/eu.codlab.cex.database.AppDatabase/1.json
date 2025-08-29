@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ede9b925f8758ce561efaa7dcba7c6e0",
+    "identityHash": "37e8d38e3f4763c7ae851e777b169549",
     "entities": [
       {
         "tableName": "Tick",
@@ -156,7 +156,7 @@
       },
       {
         "tableName": "Order",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `orderId` TEXT NOT NULL, `clientOrderId` TEXT NOT NULL, `clientId` TEXT NOT NULL, `accountId` TEXT, `status` TEXT NOT NULL, `statusIsFinal` INTEGER NOT NULL, `currency1` TEXT NOT NULL, `currency2` TEXT NOT NULL, `side` TEXT NOT NULL, `orderType` TEXT NOT NULL, `timeInForce` TEXT NOT NULL, `comment` TEXT, `rejectCode` INTEGER, `rejectReason` TEXT, `executedAmountCcy1` TEXT, `executedAmountCcy2` TEXT, `requestedAmountCcy1` TEXT, `requestedAmountCcy2` TEXT, `initialOnHoldAmountCcy1` TEXT, `initialOnHoldAmountCcy2` TEXT, `feeAmount` TEXT, `feeCurrency` TEXT, `price` TEXT, `averagePrice` TEXT, `clientCreateTimestamp` INTEGER NOT NULL, `serverCreateTimestamp` INTEGER NOT NULL, `lastUpdateTimestamp` INTEGER NOT NULL, `expireTime` INTEGER NOT NULL, `effectiveTime` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `orderId` TEXT NOT NULL, `clientOrderId` TEXT NOT NULL, `clientId` TEXT NOT NULL, `accountId` TEXT, `status` TEXT NOT NULL, `statusIsFinal` INTEGER NOT NULL, `currency1` TEXT NOT NULL, `currency2` TEXT NOT NULL, `side` TEXT NOT NULL, `orderType` TEXT NOT NULL, `timeInForce` TEXT, `comment` TEXT, `rejectCode` INTEGER, `rejectReason` TEXT, `executedAmountCcy1` TEXT, `executedAmountCcy2` TEXT, `requestedAmountCcy1` TEXT, `requestedAmountCcy2` TEXT, `initialOnHoldAmountCcy1` TEXT, `initialOnHoldAmountCcy2` TEXT, `feeAmount` TEXT, `feeCurrency` TEXT, `price` TEXT, `averagePrice` TEXT, `clientCreateTimestamp` INTEGER NOT NULL, `serverCreateTimestamp` INTEGER NOT NULL, `lastUpdateTimestamp` INTEGER NOT NULL, `expireTime` INTEGER, `effectiveTime` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -226,8 +226,7 @@
           {
             "fieldPath": "timeInForce",
             "columnName": "timeInForce",
-            "affinity": "TEXT",
-            "notNull": true
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "comment",
@@ -315,14 +314,12 @@
           {
             "fieldPath": "expireTime",
             "columnName": "expireTime",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "effectiveTime",
             "columnName": "effectiveTime",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "INTEGER"
           }
         ],
         "primaryKey": {
@@ -332,6 +329,24 @@
           ]
         },
         "indices": [
+          {
+            "name": "index_Order_orderId",
+            "unique": false,
+            "columnNames": [
+              "orderId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Order_orderId` ON `${TABLE_NAME}` (`orderId`)"
+          },
+          {
+            "name": "index_Order_clientOrderId",
+            "unique": false,
+            "columnNames": [
+              "clientOrderId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Order_clientOrderId` ON `${TABLE_NAME}` (`clientOrderId`)"
+          },
           {
             "name": "index_Order_accountId",
             "unique": false,
@@ -358,22 +373,13 @@
             ],
             "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_Order_currency2` ON `${TABLE_NAME}` (`currency2`)"
-          },
-          {
-            "name": "index_Order_orderId",
-            "unique": false,
-            "columnNames": [
-              "orderId"
-            ],
-            "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_Order_orderId` ON `${TABLE_NAME}` (`orderId`)"
           }
         ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ede9b925f8758ce561efaa7dcba7c6e0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '37e8d38e3f4763c7ae851e777b169549')"
     ]
   }
 }

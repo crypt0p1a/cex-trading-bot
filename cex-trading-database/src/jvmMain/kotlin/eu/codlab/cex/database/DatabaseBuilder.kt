@@ -12,8 +12,6 @@ internal actual fun getDatabaseBuilder(mode: DatabaseMode): RoomDatabase.Builder
     }
     val dbFile = VirtualFile(root, "trading.db")
 
-    println("using database at path ${dbFile.absolutePath}")
-
     return when (mode) {
         DatabaseMode.Normal -> Room.databaseBuilder<AppDatabase>(dbFile.absolutePath)
         DatabaseMode.InMemory -> Room.inMemoryDatabaseBuilder<AppDatabase>()

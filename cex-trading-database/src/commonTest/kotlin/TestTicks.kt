@@ -28,10 +28,19 @@ class TestTicks {
                 last = BigDecimal.ZERO,
                 volume = BigDecimal.ZERO,
                 volume30d = BigDecimal.ZERO,
-                bid = BigDecimal.ZERO,
-                ask = BigDecimal.ZERO,
-                priceChange = "test",
-                priceChangePercent = "test"
+                bestAsk = BigDecimal.ZERO,
+                bestBid = BigDecimal.ZERO,
+                bestAskChange = BigDecimal.ZERO,
+                bestBidChange = BigDecimal.ZERO,
+                bestAskChangePercentage = BigDecimal.ZERO,
+                bestBidChangePercentage = BigDecimal.ZERO,
+                quoteVolume = BigDecimal.ZERO,
+                lastTradePrice = BigDecimal.ZERO,
+                lastTradeVolume = BigDecimal.ZERO,
+                priceChange = BigDecimal.ZERO,
+                priceChangePercentage = BigDecimal.ZERO,
+                lastTradeDateISO = "",
+                volumeUSD = BigDecimal.ZERO,
             )
         )
     }

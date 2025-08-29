@@ -12,7 +12,7 @@ interface OrderDao {
     @Query("SELECT * FROM 'order' WHERE 'accountId'=:accountId AND 'currency1'=:currency1 AND 'currency2'=:currency2")
     fun flow(accountId: String, currency1: Symbol, currency2: Symbol): Flow<List<Order>>
 
-    @Query("SELECT * FROM 'order' WHERE 'accountId'=:accountId AND 'currency1'=:currency1 AND 'currency2'=:currency2")
+    @Query("SELECT * FROM 'order' WHERE accountId=:accountId AND currency1=:currency1 AND currency2=:currency2")
     suspend fun getAll(accountId: String, currency1: Symbol, currency2: Symbol): List<Order>
 
     @Insert

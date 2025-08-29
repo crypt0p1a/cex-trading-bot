@@ -8,6 +8,7 @@ services:
     environment:
       - CEX_API_KEY=${CEX_API_KEY}
       - CEX_API_SECRET=${CEX_API_SECRET}
+      - CEX_EXCLUDED_WALLETS=${CEX_EXCLUDED_WALLETS}
       - TRADING_DB_PATH=/data/tradingdb
 volumes:
   tradingdb:

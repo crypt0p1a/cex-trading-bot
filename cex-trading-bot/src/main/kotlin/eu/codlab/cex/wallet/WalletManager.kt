@@ -1,16 +1,32 @@
 package eu.codlab.cex.wallet
 
 import eu.codlab.cex.Pairs
-import eu.codlab.cex.spot.trading.PrivateApi
+import eu.codlab.cex.spot.trading.IPrivateApi
+import eu.codlab.cex.spot.trading.IPublicApi
+import eu.codlab.cex.wallet.logic.Logger
 
 class WalletManager(
     private val wallet: String,
-    private val privateApi: PrivateApi
+    private val publicApi: IPublicApi,
+    private val privateApi: IPrivateApi,
+    parent: Logger
 ) {
-    private val pairManagers = Pairs.map { WalletPairManager(wallet, privateApi, it) }
+    private val logger = Logger("[$wallet] ", parent)
+    private val pairManagers = Pairs.map { pairConfiguration ->
+        WalletPairManager(
+            wallet,
+            publicApi,
+            privateApi,
+            pairConfiguration,
+            logger
+        )
+    }
+
     suspend fun tick() {
-        println("managing $wallet")
+        logger.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        logger.log("  managing $wallet")
 
         pairManagers.forEach { it.tick() }
+        logger.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
     }
 }

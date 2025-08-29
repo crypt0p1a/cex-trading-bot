@@ -1,9 +1,11 @@
 package eu.codlab.cex.utils
 
 import eu.codlab.cex.database.orders.Order
+import eu.codlab.cex.spot.trading.groups.orders.news.TimeInForce
 import eu.codlab.cex.spot.trading.models.OrderResult
 import eu.codlab.cex.spot.trading.models.OrderStatus
 import eu.codlab.cex.database.orders.OrderStatus as OS
+import eu.codlab.cex.database.orders.TimeInForce as TIF
 
 fun OrderResult.toOrder() = Order(
     id = 0,
@@ -15,9 +17,9 @@ fun OrderResult.toOrder() = Order(
     statusIsFinal = statusIsFinal,
     currency1 = currency1,
     currency2 = currency2,
-    side = side,
-    orderType = orderType,
-    timeInForce = timeInForce,
+    side = side.toDatabase,
+    orderType = orderType.toDatabase,
+    timeInForce = timeInForce?.toDatabase,
     comment = comment,
     rejectCode = rejectCode,
     rejectReason = rejectReason,
@@ -37,6 +39,13 @@ fun OrderResult.toOrder() = Order(
     expireTime = expireTime,
     effectiveTime = effectiveTime,
 )
+
+val TimeInForce.toDatabase: TIF
+    get() = when (this) {
+        TimeInForce.GTC -> TIF.GTC
+        TimeInForce.IOC -> TIF.IOC
+        TimeInForce.GTD -> TIF.GTD
+    }
 
 val OrderStatus.toDatabase: OS
     get() = when (this) {
