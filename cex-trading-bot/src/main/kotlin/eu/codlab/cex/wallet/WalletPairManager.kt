@@ -9,8 +9,6 @@ import eu.codlab.cex.spot.trading.IPrivateApi
 import eu.codlab.cex.spot.trading.IPublicApi
 import eu.codlab.cex.spot.trading.models.OrderRequest
 import eu.codlab.cex.spot.trading.models.OrderResult
-import eu.codlab.cex.utils.WrappedPrivateApi
-import eu.codlab.cex.utils.WrappedPublicApi
 import eu.codlab.cex.utils.toOrder
 import eu.codlab.cex.wallet.logic.BuyOrder
 import eu.codlab.cex.wallet.logic.Logger
