@@ -43,6 +43,7 @@ class WalletPairManager(
     private val left = pairConfiguration.left
     private val right = pairConfiguration.right
 
+    @Suppress("ThrowsCount")
     suspend fun tick() {
         synchronizeOrders(pairConfiguration)
 
@@ -154,14 +155,14 @@ class WalletPairManager(
             )
         ).firstOrNull()
 
+    @Suppress("TooGenericExceptionCaught", "SwallowedException")
     private suspend fun manageOrderToBuy(previousOrder: Order? = null) {
         try {
             logger.log("manageOrderToBuy with previous order : $previousOrder")
             buyer.execute(previousOrder)
             synchronizeOrders(pairConfiguration)
         } catch (err: Throwable) {
-            err.printStackTrace()
-            //throw err
+            // TODO sentry
         }
     }
 
@@ -180,7 +181,6 @@ class WalletPairManager(
             )
         // if not found -> it was canceled ? but we normally get the archived
 
-
         if (remote != order) {
             logger.log("remote order state requires update")
             logger.log("previous is $order")
@@ -191,14 +191,14 @@ class WalletPairManager(
         }
     }
 
+    @Suppress("TooGenericExceptionCaught", "SwallowedException")
     private suspend fun manageOrderFilled(order: Order) {
         try {
             logger.log("manageOrderFilled ${order.orderId}")
             sell.execute(order)
             synchronizeOrders(pairConfiguration)
         } catch (err: Throwable) {
-            err.printStackTrace()
-            //throw err
+            // TODO sentry
         }
     }
 }

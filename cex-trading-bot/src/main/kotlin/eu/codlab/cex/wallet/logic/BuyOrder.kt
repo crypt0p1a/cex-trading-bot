@@ -27,6 +27,7 @@ class BuyOrder(
     private val pairConfiguration: PairConfiguration,
     private val logger: Logger
 ) : Logic<Order?> {
+    @Suppress("LongMethod", "ReturnCount", "MagicNumber")
     override suspend fun execute(previous: Order?) {
         val currentWallet = privateApi.getMyAccountStatus(
             AccountStatusRequest(
@@ -63,32 +64,32 @@ class BuyOrder(
         logger.log("expected amount to consume : ${calculatedAmountToConsume.toPlainString()}")
         logger.log("minimum amount to consume : ${minimumAmountToConsume.toPlainString()}")
 
-        val amountToConsume = if (calculatedAmountToConsume < minimumAmountToConsume) {
+        val amount = if (calculatedAmountToConsume < minimumAmountToConsume) {
             minimumAmountToConsume
         } else {
             calculatedAmountToConsume
         }
 
-        logger.log("will use ${amountToConsume.toPlainString()}")
+        logger.log("will use ${amount.toPlainString()}")
 
-        if (amountToConsume.toStringExpanded() == availableBalance.toStringExpanded()) {
+        val (consumed, balance) = amount.toStringExpanded() to availableBalance.toStringExpanded()
+
+        if (consumed == balance) {
             logger.log("will use all wallet available")
-        } else if (amountToConsume > availableBalance) {
-            logger.log("couldn't buy anything, not enough money ${amountToConsume.toStringExpanded()} != ${availableBalance.toStringExpanded()}")
+        } else if (amount > availableBalance) {
+            logger.log("couldn't buy anything, not enough money $consumed != $balance")
             return
         }
 
         assert(minimumAmountToConsume > currentWalletValue)
-        assert(amountToConsume >= availableBalance)
+        assert(amount >= availableBalance)
 
         // now we can compute what will be the amount in the other currency
         val pairInfo = publicApi.pairsInfo(pairConfiguration.leftRight).first()
-        // logger.log(pairInfo)
 
         val contextPair = pairConfiguration.leftRight.let { pair ->
             publicApi.tickers(pair)[pair]!!
         }
-        // logger.log(contextPair)
 
         assert(contextPair.low < contextPair.high)
 
@@ -112,11 +113,11 @@ class BuyOrder(
 
         assert(priceBuy < mean)
         assert(priceBuyRounded < mean)
-        // TODO test using pricebuy = low if pricebuy < low ?
 
         // take a lower part of the amount to buy (-> buy 99%)
-        val amountToBuy = amountToConsume.divide(priceBuy, DecimalModeDivide)
-            .multiply(BigDecimal.fromDouble(0.99))
+        val opponentFeeRatio = 0.99
+        val amountToBuy = amount.divide(priceBuy, DecimalModeDivide)
+            .multiply(BigDecimal.fromDouble(opponentFeeRatio))
         val amountToBuyRounded = amountToBuy.roundToDigitPositionAfterDecimalPoint(
             pairInfo.basePrecision.toLong(),
             RoundingMode.FLOOR
@@ -163,14 +164,14 @@ class BuyOrder(
                 // amountCcy2 = amountToConsume.toStringExpanded(),
                 amountCcy2 = null,
                 price = priceBuyRounded.toStringExpanded(),
-                comment = "consume[${amountToConsume.toStringExpanded()}] " +
+                comment = "consume[${amount.toStringExpanded()}] " +
                         "priceBuy[${priceBuyRounded.toStringExpanded()}]" +
                         "amountBuy[${amountToBuyAdjustedMultiple.toStringExpanded()}] " +
                         "buyCoef[${pairConfiguration.buyCoef}]",
                 timeInForce = TimeInForce.GTD,
                 expireTime = expireTime.format(expireTimeFormat),
-            ).also { println(it) }
-        ).also { println(it) }
+            ).also { logger.log("$it") }
+        ).also { logger.log("$it") }
 
         if (order.status == eu.codlab.cex.spot.trading.models.OrderStatus.REJECTED) {
             logger.log("order rejected !")

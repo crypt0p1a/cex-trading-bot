@@ -11,15 +11,14 @@ import kotlin.time.Duration.Companion.seconds
 sealed class WrappedCommonApi<T : ICommonApi>(
     private val commonApi: T
 ) : ICommonApi {
-    protected suspend fun <T> wrap(call: suspend () -> T): T {
-        return try {
-            val result = call()
-            delay(2.seconds)
-            result
-        } catch (err: Throwable) {
-            delay(2.seconds)
-            throw err
-        }
+    @Suppress("TooGenericExceptionCaught")
+    protected suspend fun <T> wrap(call: suspend () -> T) = try {
+        val result = call()
+        delay(2.seconds)
+        result
+    } catch (err: Throwable) {
+        delay(2.seconds)
+        throw err
     }
 
     /**

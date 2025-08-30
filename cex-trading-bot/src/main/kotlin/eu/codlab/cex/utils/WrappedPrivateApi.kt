@@ -11,6 +11,7 @@ import eu.codlab.cex.spot.trading.groups.pairsinfo.Pairs
 import eu.codlab.cex.spot.trading.groups.volume.Volume
 import eu.codlab.cex.spot.trading.models.OrderRequest
 
+@Suppress("TooManyFunctions")
 class WrappedPrivateApi(
     private val privateApi: PrivateApi
 ) : WrappedCommonApi<PrivateApi>(privateApi), IPrivateApi {

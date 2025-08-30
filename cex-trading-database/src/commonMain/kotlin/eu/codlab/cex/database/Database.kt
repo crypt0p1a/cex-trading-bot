@@ -1,27 +1,39 @@
 package eu.codlab.cex.database
 
-
 import eu.codlab.cex.database.orders.OrderController
 import eu.codlab.cex.database.orders.OrderControllerImpl
 import eu.codlab.cex.database.tick.TickController
 import eu.codlab.cex.database.tick.TickControllerImpl
 
 object Database {
-    private lateinit var _database: AppDatabase
+    @Suppress("ktlint:standard:backing-property-naming")
+    private lateinit var _db: AppDatabase
 
-    private val database: AppDatabase
+    private val db: AppDatabase
         get() {
-            if (!::_database.isInitialized) {
-                _database = getDatabase(mode)
+            if (!::_db.isInitialized) {
+                _db = getDatabase(mode)
             }
-            return _database
+            return _db
         }
 
     internal var mode = DatabaseMode.Normal
 
+    private lateinit var _ticks: TickController
     val ticks: TickController
-        get() = TickControllerImpl(database)
+        get() {
+            if (!::_ticks.isInitialized) {
+                _ticks = TickControllerImpl(db)
+            }
+            return _ticks
+        }
 
+    private lateinit var _orders: OrderController
     val orders: OrderController
-        get() = OrderControllerImpl(database)
+        get() {
+            if (!::_orders.isInitialized) {
+                _orders = OrderControllerImpl(db)
+            }
+            return _orders
+        }
 }

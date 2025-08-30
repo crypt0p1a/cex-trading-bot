@@ -10,11 +10,8 @@ import kotlinx.serialization.encoding.Encoder
 object DateTimeSerializer : KSerializer<DateTime> {
     override val descriptor = PrimitiveSerialDescriptor("DateTime", PrimitiveKind.LONG)
 
-    override fun deserialize(decoder: Decoder): DateTime {
-        return DateTime.fromUnixMillis(decoder.decodeLong())
-    }
+    override fun deserialize(decoder: Decoder) = DateTime.fromUnixMillis(decoder.decodeLong())
 
-    override fun serialize(encoder: Encoder, value: DateTime) {
+    override fun serialize(encoder: Encoder, value: DateTime) =
         encoder.encodeLong(value.unixMillisLong)
-    }
 }

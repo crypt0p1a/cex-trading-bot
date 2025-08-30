@@ -2,7 +2,6 @@ package eu.codlab.cex.utils
 
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 
-
 fun BigDecimal.findNearestMultiple(base: BigDecimal): BigDecimal {
     if (base == BigDecimal.ZERO) {
         throw IllegalArgumentException("Base cannot be zero.")

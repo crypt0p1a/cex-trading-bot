@@ -17,6 +17,7 @@ class WalletsManager(
 
     private val mutableWallets = mutableMapOf<String, WalletManager>()
 
+    @Suppress("TooGenericExceptionCaught")
     override suspend fun tick() {
         val info = privateApi.getMyAccountStatus(AccountStatusRequest())
 

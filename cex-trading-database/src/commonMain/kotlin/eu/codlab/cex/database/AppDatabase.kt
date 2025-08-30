@@ -25,6 +25,7 @@ import kotlinx.coroutines.Dispatchers
 @ConstructedBy(AppDatabaseConstructor::class)
 internal abstract class AppDatabase : RoomDatabase() {
     abstract fun getTickDao(): TickDao
+
     abstract fun getOrderDao(): OrderDao
 }
 

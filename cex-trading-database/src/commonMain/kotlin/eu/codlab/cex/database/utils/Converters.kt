@@ -6,22 +6,14 @@ import korlibs.time.DateTime
 
 class Converters {
     @TypeConverter
-    fun fromLongToDateTime(value: Long?): DateTime? {
-        return value?.let { DateTime(it) }
-    }
+    fun fromLongToDateTime(value: Long?) = value?.let { DateTime(it) }
 
     @TypeConverter
-    fun fromDateTimeToLong(date: DateTime?): Long? {
-        return date?.unixMillisLong
-    }
+    fun fromDateTimeToLong(date: DateTime?) = date?.unixMillisLong
 
     @TypeConverter
-    fun fromStringToBigDecimal(value: String?): BigDecimal? {
-        return value?.let { BigDecimal.parseString(it) }
-    }
+    fun fromStringToBigDecimal(value: String?) = value?.let { BigDecimal.parseString(it) }
 
     @TypeConverter
-    fun fromBigDecimalToString(bigDecimal: BigDecimal?): String? {
-        return bigDecimal?.toStringExpanded()
-    }
+    fun fromBigDecimalToString(bigDecimal: BigDecimal?) = bigDecimal?.toStringExpanded()
 }

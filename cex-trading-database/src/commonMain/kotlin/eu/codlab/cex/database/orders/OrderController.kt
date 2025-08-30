@@ -23,14 +23,13 @@ internal class OrderControllerImpl(database: AppDatabase) : OrderController {
     override suspend fun getAll(accountId: String, left: Symbol, right: Symbol) =
         dao.getAll(accountId, left, right)
 
-    override suspend fun insertOrUpdate(insertOrUpdate: Order): Long {
-        return if (insertOrUpdate.id > 0) {
+    override suspend fun insertOrUpdate(insertOrUpdate: Order) =
+        if (insertOrUpdate.id > 0) {
             dao.update(insertOrUpdate)
             insertOrUpdate.id
         } else {
             dao.insert(insertOrUpdate)
         }
-    }
 
     override suspend fun deleteOrders() = dao.deleteOrders()
 }
