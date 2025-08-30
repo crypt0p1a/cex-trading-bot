@@ -36,8 +36,12 @@ class WalletManager(
 
         pairManagers.forEach { it.tick() }
 
-        val expectedValues = accountValue.execute(pairs)
-        logger.log(" $wallet expected value ${expectedValues.toStringExpanded()}")
+        try {
+            val expectedValues = accountValue.execute(pairs)
+            logger.log(" $wallet expected value ${expectedValues.toStringExpanded()}")
+        } catch (_: Throwable) {
+            // until stability is checked and Sentry plugged in, just skip
+        }
         logger.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
     }
 }
