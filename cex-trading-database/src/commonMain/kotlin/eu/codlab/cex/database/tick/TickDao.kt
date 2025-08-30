@@ -15,6 +15,9 @@ interface TickDao {
     @Query("SELECT * FROM tick WHERE 'left'=:left AND 'right'=:right")
     suspend fun getAll(left: Symbol, right: Symbol): List<Tick>
 
+    @Query("SELECT * FROM tick WHERE `left`=:left AND `right`=:right ORDER BY id DESC LIMIT 255")
+    suspend fun getDesc(left: Symbol, right: Symbol): List<Tick>
+
     @Insert
     suspend fun insert(tick: Tick): Long
 

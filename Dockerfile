@@ -18,6 +18,7 @@ COPY gradle/libs.versions.toml gradle/versions.gradle ./gradle/
 COPY cex-trading-bot ./cex-trading-bot
 COPY cex-trading-database ./cex-trading-database
 COPY cex-trading-env ./cex-trading-env
+COPY cex-trading-tools ./cex-trading-tools
 
 RUN rm -rf cex-trading-*/build
 

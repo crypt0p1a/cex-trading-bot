@@ -9,6 +9,8 @@ interface TickController {
 
     suspend fun getAll(left: Symbol, right: Symbol): List<Tick>
 
+    suspend fun getDesc(left: Symbol, right: Symbol): List<Tick>
+
     suspend fun insertOrUpdate(tickOrUpdate: Tick): Long
 
     suspend fun deleteTicks()
@@ -20,6 +22,8 @@ internal class TickControllerImpl(database: AppDatabase) : TickController {
     override suspend fun flow(left: Symbol, right: Symbol) = dao.flow(left, right)
 
     override suspend fun getAll(left: Symbol, right: Symbol) = dao.getAll(left, right)
+
+    override suspend fun getDesc(left: Symbol, right: Symbol) = dao.getDesc(left, right)
 
     override suspend fun insertOrUpdate(tickOrUpdate: Tick) =
         if (tickOrUpdate.id > 0) {

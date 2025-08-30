@@ -9,10 +9,12 @@ import eu.codlab.cex.spot.trading.IPrivateApi
 import eu.codlab.cex.spot.trading.IPublicApi
 import eu.codlab.cex.spot.trading.models.OrderRequest
 import eu.codlab.cex.spot.trading.models.OrderResult
+import eu.codlab.cex.tools.group.Direction
 import eu.codlab.cex.utils.toOrder
 import eu.codlab.cex.wallet.logic.BuyOrder
 import eu.codlab.cex.wallet.logic.Logger
 import eu.codlab.cex.wallet.logic.SellOrder
+import eu.codlab.cex.wallet.logic.Trend
 import korlibs.time.DateTime
 import korlibs.time.days
 
@@ -31,6 +33,10 @@ class WalletPairManager(
         pairConfiguration = pairConfiguration,
         logger = Logger("  ", logger)
     )
+    private val trend = Trend(
+        pairConfiguration,
+        Logger("  ", logger)
+    )
     private val sell = SellOrder(
         wallet = wallet,
         publicApi = publicApi,
@@ -43,6 +49,8 @@ class WalletPairManager(
 
     @Suppress("ThrowsCount")
     suspend fun tick() {
+        trend()
+
         synchronizeOrders(pairConfiguration)
 
         val order = Database.orders.getAll(wallet, left, right)
@@ -197,6 +205,15 @@ class WalletPairManager(
             synchronizeOrders(pairConfiguration)
         } catch (err: Throwable) {
             // TODO sentry
+        }
+    }
+
+    private suspend fun trend(): Direction? {
+        return try {
+            trend.execute()
+        } catch (err: Throwable) {
+            err.printStackTrace()
+            null
         }
     }
 }

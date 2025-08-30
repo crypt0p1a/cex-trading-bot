@@ -29,8 +29,10 @@ dependencies {
 
     api(additionals.multiplatform.platform)
 
-    api(project(":cex-trading-database"))
     api(libs.cex.spot.trading)
     api(libs.bignum)
-    implementation(project(":cex-trading-env"))
+
+    api(project(":cex-trading-env"))
+    api(project(":cex-trading-database"))
+    api(project(":cex-trading-tools"))
 }
