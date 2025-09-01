@@ -9,7 +9,6 @@ import eu.codlab.cex.spot.trading.IPrivateApi
 import eu.codlab.cex.spot.trading.IPublicApi
 import eu.codlab.cex.spot.trading.models.OrderRequest
 import eu.codlab.cex.spot.trading.models.OrderResult
-import eu.codlab.cex.tools.group.Direction
 import eu.codlab.cex.utils.toOrder
 import eu.codlab.cex.wallet.logic.BuyOrder
 import eu.codlab.cex.wallet.logic.Logger
@@ -208,12 +207,10 @@ class WalletPairManager(
         }
     }
 
-    private suspend fun trend(): Direction? {
-        return try {
-            trend.execute()
-        } catch (err: Throwable) {
-            err.printStackTrace()
-            null
-        }
+    private suspend fun trend() = try {
+        trend.execute()
+    } catch (err: Throwable) {
+        err.printStackTrace()
+        null
     }
 }

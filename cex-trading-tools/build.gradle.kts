@@ -15,5 +15,11 @@ kotlin {
                 api(kotlin("test"))
             }
         }
+
+        val jvmMain by getting {
+            dependencies {
+                api(libs.ta4j)
+            }
+        }
     }
 }
