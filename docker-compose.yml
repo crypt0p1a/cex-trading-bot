@@ -10,5 +10,10 @@ services:
       - CEX_API_SECRET=${CEX_API_SECRET}
       - CEX_EXCLUDED_WALLETS=${CEX_EXCLUDED_WALLETS}
       - TRADING_DB_PATH=/data/tradingdb
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 50m
+        max-file: "10"
 volumes:
   tradingdb:
