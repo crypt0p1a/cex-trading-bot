@@ -2,7 +2,7 @@ package eu.codlab.cex.wallet.logic
 
 import eu.codlab.cex.PairConfiguration
 import eu.codlab.cex.database.Database
-import eu.codlab.cex.database.tick.Tick
+import eu.codlab.cex.database.candle.Candle
 import eu.codlab.cex.tools.extrapolate.Bar5m
 import eu.codlab.cex.tools.extrapolate.Direction
 import eu.codlab.cex.tools.extrapolate.Predict
@@ -11,36 +11,32 @@ class Trend(
     private val pairConfiguration: PairConfiguration,
     private val logger: Logger,
 ) {
+    private val predict = Predict()
     suspend fun execute(): Direction {
-        val predict = Predict()
-        var previous: Tick? = null
+        val candles = getCandles().map { it.toBar5m() }
 
-        val bypassedTickers = getTickers().mapNotNull { ticker ->
-            if (previous == null) {
-                previous = ticker
-                null
-            } else {
-                Bar5m(
-                    lastPrice = ticker.last.doubleValue(false),
-                    openPrice = previous.last.doubleValue(false),
-                    closePrice = ticker.last.doubleValue(false),
-                    volume = ticker.volume.doubleValue(false),
-                    highPrice = ticker.high.doubleValue(false),
-                    lowPrice = ticker.low.doubleValue(false),
-                ).also {
-                    previous = ticker
-                }
-            }
+        if (candles.size < 10) {
+            logger.log("   can't compute an accurate prediction, size is ${candles.size}")
+            return Direction.INVALID
         }
 
-        return predict.predictWithTa4j(bypassedTickers).also {
+        return predict.predictWithTa4j(getCandles().map { it.toBar5m() }).also {
             logger.log("   and better prediction is $it")
         }
     }
 
-    private suspend fun getTickers() =
-        Database.ticks.getDesc(pairConfiguration.left, pairConfiguration.right)
+    private suspend fun getCandles() =
+        Database.candles.getDesc(pairConfiguration.left, pairConfiguration.right)
             .associateBy { it.timestamp.unixMillisLong }.map { (key, value) ->
                 value
             }.sortedBy { it.timestamp.unixMillisLong }
+
+    private fun Candle.toBar5m() = Bar5m(
+        lastPrice = close.doubleValue(false),
+        openPrice = open.doubleValue(false),
+        closePrice = close.doubleValue(false),
+        volume = volume.doubleValue(false),
+        highPrice = high.doubleValue(false),
+        lowPrice = low.doubleValue(false),
+    )
 }

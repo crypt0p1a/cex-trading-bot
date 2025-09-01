@@ -1,0 +1,457 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "9b297c968351f6fccedd2b917cc41ce8",
+    "entities": [
+      {
+        "tableName": "Tick",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `exchange` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `left` TEXT NOT NULL, `right` TEXT NOT NULL, `low` TEXT NOT NULL, `high` TEXT NOT NULL, `last` TEXT NOT NULL, `bestBid` TEXT NOT NULL, `bestAsk` TEXT NOT NULL, `bestBidChange` TEXT NOT NULL, `bestBidChangePercentage` TEXT NOT NULL, `bestAskChange` TEXT NOT NULL, `bestAskChangePercentage` TEXT NOT NULL, `volume` TEXT NOT NULL, `volume30d` TEXT NOT NULL, `quoteVolume` TEXT NOT NULL, `lastTradeVolume` TEXT NOT NULL, `lastTradePrice` TEXT NOT NULL, `priceChange` TEXT NOT NULL, `priceChangePercentage` TEXT NOT NULL, `lastTradeDateISO` TEXT NOT NULL, `volumeUSD` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "exchange",
+            "columnName": "exchange",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "left",
+            "columnName": "left",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "right",
+            "columnName": "right",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "low",
+            "columnName": "low",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "high",
+            "columnName": "high",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "last",
+            "columnName": "last",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bestBid",
+            "columnName": "bestBid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bestAsk",
+            "columnName": "bestAsk",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bestBidChange",
+            "columnName": "bestBidChange",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bestBidChangePercentage",
+            "columnName": "bestBidChangePercentage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bestAskChange",
+            "columnName": "bestAskChange",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bestAskChangePercentage",
+            "columnName": "bestAskChangePercentage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "volume",
+            "columnName": "volume",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "volume30d",
+            "columnName": "volume30d",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quoteVolume",
+            "columnName": "quoteVolume",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastTradeVolume",
+            "columnName": "lastTradeVolume",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastTradePrice",
+            "columnName": "lastTradePrice",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "priceChange",
+            "columnName": "priceChange",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "priceChangePercentage",
+            "columnName": "priceChangePercentage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastTradeDateISO",
+            "columnName": "lastTradeDateISO",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "volumeUSD",
+            "columnName": "volumeUSD",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "Order",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `orderId` TEXT NOT NULL, `clientOrderId` TEXT NOT NULL, `clientId` TEXT NOT NULL, `accountId` TEXT, `status` TEXT NOT NULL, `statusIsFinal` INTEGER NOT NULL, `currency1` TEXT NOT NULL, `currency2` TEXT NOT NULL, `side` TEXT NOT NULL, `orderType` TEXT NOT NULL, `timeInForce` TEXT, `comment` TEXT, `rejectCode` INTEGER, `rejectReason` TEXT, `executedAmountCcy1` TEXT, `executedAmountCcy2` TEXT, `requestedAmountCcy1` TEXT, `requestedAmountCcy2` TEXT, `initialOnHoldAmountCcy1` TEXT, `initialOnHoldAmountCcy2` TEXT, `feeAmount` TEXT, `feeCurrency` TEXT, `price` TEXT, `averagePrice` TEXT, `clientCreateTimestamp` INTEGER NOT NULL, `serverCreateTimestamp` INTEGER NOT NULL, `lastUpdateTimestamp` INTEGER NOT NULL, `expireTime` INTEGER, `effectiveTime` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orderId",
+            "columnName": "orderId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "clientOrderId",
+            "columnName": "clientOrderId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "clientId",
+            "columnName": "clientId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "accountId",
+            "columnName": "accountId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "statusIsFinal",
+            "columnName": "statusIsFinal",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currency1",
+            "columnName": "currency1",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currency2",
+            "columnName": "currency2",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "side",
+            "columnName": "side",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orderType",
+            "columnName": "orderType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timeInForce",
+            "columnName": "timeInForce",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "comment",
+            "columnName": "comment",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "rejectCode",
+            "columnName": "rejectCode",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rejectReason",
+            "columnName": "rejectReason",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "executedAmountCcy1",
+            "columnName": "executedAmountCcy1",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "executedAmountCcy2",
+            "columnName": "executedAmountCcy2",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "requestedAmountCcy1",
+            "columnName": "requestedAmountCcy1",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "requestedAmountCcy2",
+            "columnName": "requestedAmountCcy2",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "initialOnHoldAmountCcy1",
+            "columnName": "initialOnHoldAmountCcy1",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "initialOnHoldAmountCcy2",
+            "columnName": "initialOnHoldAmountCcy2",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "feeAmount",
+            "columnName": "feeAmount",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "feeCurrency",
+            "columnName": "feeCurrency",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "averagePrice",
+            "columnName": "averagePrice",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "clientCreateTimestamp",
+            "columnName": "clientCreateTimestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "serverCreateTimestamp",
+            "columnName": "serverCreateTimestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastUpdateTimestamp",
+            "columnName": "lastUpdateTimestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "expireTime",
+            "columnName": "expireTime",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "effectiveTime",
+            "columnName": "effectiveTime",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_Order_orderId",
+            "unique": false,
+            "columnNames": [
+              "orderId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Order_orderId` ON `${TABLE_NAME}` (`orderId`)"
+          },
+          {
+            "name": "index_Order_clientOrderId",
+            "unique": false,
+            "columnNames": [
+              "clientOrderId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Order_clientOrderId` ON `${TABLE_NAME}` (`clientOrderId`)"
+          },
+          {
+            "name": "index_Order_accountId",
+            "unique": false,
+            "columnNames": [
+              "accountId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Order_accountId` ON `${TABLE_NAME}` (`accountId`)"
+          },
+          {
+            "name": "index_Order_currency1",
+            "unique": false,
+            "columnNames": [
+              "currency1"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Order_currency1` ON `${TABLE_NAME}` (`currency1`)"
+          },
+          {
+            "name": "index_Order_currency2",
+            "unique": false,
+            "columnNames": [
+              "currency2"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Order_currency2` ON `${TABLE_NAME}` (`currency2`)"
+          }
+        ]
+      },
+      {
+        "tableName": "Candle",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `exchange` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `left` TEXT NOT NULL, `right` TEXT NOT NULL, `open` TEXT NOT NULL, `high` TEXT NOT NULL, `low` TEXT NOT NULL, `close` TEXT NOT NULL, `volume` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "exchange",
+            "columnName": "exchange",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "left",
+            "columnName": "left",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "right",
+            "columnName": "right",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "open",
+            "columnName": "open",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "high",
+            "columnName": "high",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "low",
+            "columnName": "low",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "close",
+            "columnName": "close",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "volume",
+            "columnName": "volume",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9b297c968351f6fccedd2b917cc41ce8')"
+    ]
+  }
+}

@@ -87,6 +87,7 @@ class BuyOrder(
         // now we can compute what will be the amount in the other currency
         val pairInfo = publicApi.pairsInfo(pairConfiguration.leftRight).first()
 
+        // using the ticker because of the 24h of data for each
         val contextPair = pairConfiguration.leftRight.let { pair ->
             publicApi.tickers(pair)[pair]!!
         }

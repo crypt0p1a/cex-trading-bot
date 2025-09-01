@@ -1,5 +1,6 @@
 package eu.codlab.cex
 
+import eu.codlab.cex.candles.CandleManager
 import eu.codlab.cex.spot.trading.PrivateApi
 import eu.codlab.cex.spot.trading.PublicApi
 import eu.codlab.cex.ticks.TickManager
@@ -24,6 +25,10 @@ fun main() {
             TickManager(publicApi)
         )
 
+        val candleManager = Looper(
+            CandleManager(publicApi)
+        )
+
         val walletsManager = Looper(
             WalletsManager(
                 WrappedPublicApi(publicApi),
@@ -34,6 +39,7 @@ fun main() {
 
         val jobs = listOf(
             tickManager.loop(),
+            candleManager.loop(),
             walletsManager.loop()
         )
 

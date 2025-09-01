@@ -1,5 +1,7 @@
 package eu.codlab.cex.database
 
+import eu.codlab.cex.database.candle.CandleController
+import eu.codlab.cex.database.candle.CandleControllerImpl
 import eu.codlab.cex.database.orders.OrderController
 import eu.codlab.cex.database.orders.OrderControllerImpl
 import eu.codlab.cex.database.tick.TickController
@@ -35,5 +37,14 @@ object Database {
                 _orders = OrderControllerImpl(db)
             }
             return _orders
+        }
+
+    private lateinit var _candles: CandleController
+    val candles: CandleController
+        get() {
+            if (!::_candles.isInitialized) {
+                _candles = CandleControllerImpl(db)
+            }
+            return _candles
         }
 }
