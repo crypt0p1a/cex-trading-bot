@@ -38,5 +38,6 @@ class Trend(
         volume = volume.doubleValue(false),
         highPrice = high.doubleValue(false),
         lowPrice = low.doubleValue(false),
+        timestamp = timestamp.unixMillisLong,
     )
 }

@@ -8,23 +8,20 @@ import org.ta4j.core.indicators.helpers.VolumeIndicator
 import org.ta4j.core.num.DecimalNum
 import org.ta4j.core.rules.OverIndicatorRule
 import org.ta4j.core.rules.UnderIndicatorRule
-import java.time.ZonedDateTime
+import kotlin.time.ExperimentalTime
 
 actual class Predict {
+    @OptIn(ExperimentalTime::class)
     actual fun predictWithTa4j(bars: List<Bar5m>): Direction {
         val series = BaseBarSeriesBuilder().withName("5m").build()
 
-        var endTime = ZonedDateTime.now()
-
         bars.forEach {
-            endTime = endTime + java.time.Duration.ofMinutes(5)
-
             series.addBar(
                 BaseBar.builder(
                     { `val`: Number? -> DecimalNum.valueOf(`val`) },
                     Number::class.java
                 ).timePeriod(java.time.Duration.ofMinutes(5))
-                    .endTime(endTime)
+                    .endTime(it.toZonedDateTime())
                     .openPrice(it.openPrice)   // we only have lastPrice; use it for all OHLC
                     .highPrice(it.highPrice)
                     .lowPrice(it.lowPrice)
