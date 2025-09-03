@@ -9,6 +9,7 @@ import eu.codlab.cex.spot.trading.IPrivateApi
 import eu.codlab.cex.spot.trading.IPublicApi
 import eu.codlab.cex.spot.trading.models.OrderRequest
 import eu.codlab.cex.spot.trading.models.OrderResult
+import eu.codlab.cex.tools.extrapolate.Directions
 import eu.codlab.cex.utils.toOrder
 import eu.codlab.cex.wallet.logic.BuyOrder
 import eu.codlab.cex.wallet.logic.Logger
@@ -48,7 +49,7 @@ class WalletPairManager(
 
     @Suppress("ThrowsCount")
     suspend fun tick() {
-        trend()
+        val trend = trend()
 
         synchronizeOrders(pairConfiguration)
 
@@ -78,7 +79,7 @@ class WalletPairManager(
                 if (order.side == OrderSide.SELL) {
                     throw IllegalStateException("Order ${order.orderId} shouldn't be expired !")
                 }
-                manageOrderToBuy(order)
+                manageOrderToBuy(order, trend)
             }
 
             OrderStatus.REJECTED -> {
@@ -94,7 +95,7 @@ class WalletPairManager(
                     throw IllegalStateException("Order ${order.orderId} has been cancelled but was selling ?")
                 }
 
-                manageOrderToBuy(order)
+                manageOrderToBuy(order, trend)
             }
         }
     }
@@ -161,14 +162,15 @@ class WalletPairManager(
         ).firstOrNull()
 
     @Suppress("TooGenericExceptionCaught", "SwallowedException")
-    private suspend fun manageOrderToBuy(previousOrder: Order? = null) {
-        try {
-            logger.log("manageOrderToBuy with previous order : $previousOrder")
-            buyer.execute(previousOrder)
-            synchronizeOrders(pairConfiguration)
-        } catch (err: Throwable) {
-            // TODO sentry
-        }
+    private suspend fun manageOrderToBuy(
+        previousOrder: Order? = null,
+        trend: Directions = Directions.INVALID
+    ) = try {
+        logger.log("manageOrderToBuy with previous order : $previousOrder")
+        buyer.execute(previousOrder, trend)
+        synchronizeOrders(pairConfiguration)
+    } catch (err: Throwable) {
+        // TODO sentry
     }
 
     private suspend fun checkOrderState(order: Order) {
@@ -211,6 +213,6 @@ class WalletPairManager(
         trend.execute()
     } catch (err: Throwable) {
         err.printStackTrace()
-        null
+        Directions.INVALID
     }
 }

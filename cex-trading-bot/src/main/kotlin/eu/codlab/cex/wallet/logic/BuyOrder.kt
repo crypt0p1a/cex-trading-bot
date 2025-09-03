@@ -13,6 +13,7 @@ import eu.codlab.cex.spot.trading.groups.orders.OrderType
 import eu.codlab.cex.spot.trading.groups.orders.news.NewOrder
 import eu.codlab.cex.spot.trading.groups.orders.news.NewOrderAnswer
 import eu.codlab.cex.spot.trading.groups.orders.news.TimeInForce
+import eu.codlab.cex.tools.extrapolate.Directions
 import eu.codlab.cex.utils.DecimalModeDivide
 import eu.codlab.cex.utils.expireTimeFormat
 import eu.codlab.cex.utils.findNearestMultiple
@@ -30,9 +31,14 @@ class BuyOrder(
     private val logger: Logger
 ) : Logic<Order?> {
     @Suppress("LongMethod", "ReturnCount", "MagicNumber")
-    override suspend fun execute(previous: Order?) {
+    override suspend fun execute(previous: Order?, trend: Directions) {
         if (!canContinueBuyOrderLogic(previous)) {
             logger.log("need to wait order timeout")
+            return
+        }
+
+        if (trend.isDown) {
+            logger.log("skipping buy order, trending is down ($trend)")
             return
         }
 

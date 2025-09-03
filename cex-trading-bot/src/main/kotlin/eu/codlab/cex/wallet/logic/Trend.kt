@@ -4,7 +4,7 @@ import eu.codlab.cex.PairConfiguration
 import eu.codlab.cex.database.Database
 import eu.codlab.cex.database.candle.Candle
 import eu.codlab.cex.tools.extrapolate.Bar5m
-import eu.codlab.cex.tools.extrapolate.Direction
+import eu.codlab.cex.tools.extrapolate.Directions
 import eu.codlab.cex.tools.extrapolate.Predict
 
 class Trend(
@@ -12,12 +12,12 @@ class Trend(
     private val logger: Logger,
 ) {
     private val predict = Predict()
-    suspend fun execute(): Direction {
+    suspend fun execute(): Directions {
         val candles = getCandles().map { it.toBar5m() }
 
-        if (candles.size < 10) {
+        if (candles.size < 24) {
             logger.log("   can't compute an accurate prediction, size is ${candles.size}")
-            return Direction.INVALID
+            return Directions.INVALID
         }
 
         return predict.predictWithTa4j(getCandles().map { it.toBar5m() }).also {
