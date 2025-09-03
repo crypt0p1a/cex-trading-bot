@@ -18,7 +18,9 @@ import eu.codlab.cex.utils.expireTimeFormat
 import eu.codlab.cex.utils.findNearestMultiple
 import eu.codlab.cex.utils.toBigDecimal
 import korlibs.time.DateTime
+import korlibs.time.hours
 import korlibs.time.months
+import kotlin.math.abs
 
 class BuyOrder(
     private val wallet: String,
@@ -29,6 +31,11 @@ class BuyOrder(
 ) : Logic<Order?> {
     @Suppress("LongMethod", "ReturnCount", "MagicNumber")
     override suspend fun execute(previous: Order?) {
+        if (!canContinueBuyOrderLogic(previous)) {
+            logger.log("need to wait order timeout")
+            return
+        }
+
         val currentWallet = privateApi.getMyAccountStatus(
             AccountStatusRequest(
                 accountIds = setOf(wallet)
@@ -188,6 +195,14 @@ class BuyOrder(
         currentWeight = pairConfiguration.balanceWeightUsed,
         minimumValueInCurrency = pairConfiguration.minimumBalanceUsed
     )
+
+    private fun canContinueBuyOrderLogic(previous: Order?): Boolean {
+        if (null == previous) return true
+
+        val diffMs = abs(DateTime.nowUnixMillisLong() - previous.lastUpdateTimestamp)
+
+        return diffMs > 6.hours.millisecondsLong
+    }
 
     private data class EnvToBuyAsset(
         val currentWeight: Int,
