@@ -4,7 +4,8 @@ data class Directions(
     val direction3h: Direction,
     val direction12h: Direction
 ) {
-    val isDown = direction3h == Direction.DOWN && direction12h == Direction.DOWN
+    val isDown = listOf(Direction.DOWN, Direction.INVALID)
+        .any { direction3h == it && direction12h == it }
 
     companion object {
         val INVALID = Directions(Direction.INVALID, Direction.INVALID)

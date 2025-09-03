@@ -72,7 +72,7 @@ class WalletPairManager(
             }
 
             OrderStatus.FILLED -> {
-                manageOrderFilled(order)
+                manageOrderFilled(order, trend)
             }
 
             OrderStatus.EXPIRED -> {
@@ -199,10 +199,10 @@ class WalletPairManager(
     }
 
     @Suppress("TooGenericExceptionCaught", "SwallowedException")
-    private suspend fun manageOrderFilled(order: Order) {
+    private suspend fun manageOrderFilled(order: Order, trend: Directions) {
         try {
             logger.log("manageOrderFilled ${order.orderId}")
-            sell.execute(order)
+            sell.execute(order, trend)
             synchronizeOrders(pairConfiguration)
         } catch (err: Throwable) {
             // TODO sentry

@@ -11,6 +11,7 @@ import eu.codlab.cex.spot.trading.groups.orders.news.NewOrder
 import eu.codlab.cex.spot.trading.groups.orders.news.NewOrderAnswer
 import eu.codlab.cex.spot.trading.groups.orders.news.TimeInForce
 import eu.codlab.cex.spot.trading.models.OrderStatus
+import eu.codlab.cex.tools.extrapolate.Directions
 import eu.codlab.cex.utils.DecimalModeDivide
 import eu.codlab.cex.utils.toBigDecimal
 
@@ -21,7 +22,7 @@ class SellOrder(
     private val pairConfiguration: PairConfiguration,
     private val logger: Logger
 ) : Logic<Order> {
-    override suspend fun execute(previous: Order) {
+    override suspend fun execute(previous: Order, trend: Directions) {
         val requestedAmountCcy1 = previous.requestedAmountCcy1!!.toStringExpanded()
         val buyPrice = previous.price!!
 
