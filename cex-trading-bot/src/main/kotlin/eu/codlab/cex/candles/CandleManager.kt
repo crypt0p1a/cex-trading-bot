@@ -4,6 +4,7 @@ import eu.codlab.cex.PairConfiguration
 import eu.codlab.cex.Pairs
 import eu.codlab.cex.database.Database
 import eu.codlab.cex.spot.trading.PublicApi
+import eu.codlab.cex.spot.trading.groups.candles.Candle
 import eu.codlab.cex.spot.trading.groups.candles.CandleResolution
 import eu.codlab.cex.spot.trading.groups.candles.CandlesFromPair
 import eu.codlab.cex.spot.trading.models.DataType
@@ -39,15 +40,9 @@ class CandleManager(
             }
 
             if (hasLast) {
-                val candle = candles.last()
-                val mapped = candle.toCandle(pairConfiguration.left, pairConfiguration.right)
-
-                Database.candles.insertOrUpdate(mapped)
+                insertOrUpdate(pairConfiguration, candles.lastOrNull())
             } else {
-                candles.forEach {
-                    val mapped = it.toCandle(pairConfiguration.left, pairConfiguration.right)
-                    Database.candles.insertOrUpdate(mapped)
-                }
+                candles.forEach { insertOrUpdate(pairConfiguration, it) }
             }
         } catch (err: Throwable) {
             err.printStackTrace()
@@ -58,5 +53,17 @@ class CandleManager(
 
     override suspend fun tick() {
         Pairs.forEach { managePair(it) }
+    }
+
+    private suspend fun insertOrUpdate(
+        pairConfiguration: PairConfiguration,
+        candle: Candle?
+    ) = try {
+        val mapped = candle!!.toCandle(pairConfiguration.left, pairConfiguration.right)
+
+        Database.candles.insertOrUpdate(mapped)
+    } catch (err: Throwable) {
+        println("couldn't insert candle for ${pairConfiguration.leftRight} -> $candle")
+        err.printStackTrace()
     }
 }
