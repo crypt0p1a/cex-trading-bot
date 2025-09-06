@@ -56,7 +56,7 @@ class WalletPairManager(
         synchronizeOrders(pairConfiguration)
 
         val order = Database.orders.getAll(wallet, left, right)
-            .maxByOrNull { it.clientCreateTimestamp } ?: return manageOrderToBuy(trend)
+            .maxByOrNull { it.clientCreateTimestamp } ?: return manageOrderToBuy(trend = trend)
 
         // now differentiate what to do with this order...
         return when (order.status) {
