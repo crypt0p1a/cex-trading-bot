@@ -27,7 +27,7 @@ data class Configuration(
                     apiKey = map["CEX_API_KEY"]!!,
                     apiSecret = map["CEX_API_SECRET"]!!,
                     excludedWallets = map["CEX_EXCLUDED_WALLETS"]?.split(",") ?: emptyList(),
-                    enabledPairForWallets = extract(map["CEX_WALLETS_ENABLED_SYMBOLS"])
+                    enabledSymbolsForWallets = extract(map["CEX_WALLETS_ENABLED_SYMBOLS"])
 
                 )
             } else {
@@ -36,7 +36,7 @@ data class Configuration(
                     apiSecret = System.getenv("CEX_API_SECRET"),
                     excludedWallets = System.getenv()["CEX_EXCLUDED_WALLETS"]?.split(",")
                         ?: emptyList(),
-                    enabledPairForWallets = extract(System.getenv()["CEX_WALLETS_ENABLED_SYMBOLS"])
+                    enabledSymbolsForWallets = extract(System.getenv()["CEX_WALLETS_ENABLED_SYMBOLS"])
                 )
             }
         }
