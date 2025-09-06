@@ -31,4 +31,10 @@ val Pairs = listOf(
         buyCoef = 0.985,
         sellCoef = 1.015
     ),
+    PairConfiguration(
+        left = Symbol.ETHFI,
+        right = Symbol.USD,
+        buyCoef = 0.99,
+        sellCoef = 1.02
+    ),
 )

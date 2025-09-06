@@ -11,4 +11,5 @@ enum class Symbol {
     DOGE,
     LTC,
     XRP,
+    ETHFI
 }
