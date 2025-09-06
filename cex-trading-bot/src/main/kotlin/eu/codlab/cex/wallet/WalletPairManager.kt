@@ -23,6 +23,7 @@ class WalletPairManager(
     private val publicApi: IPublicApi,
     private val privateApi: IPrivateApi,
     private val pairConfiguration: PairConfiguration,
+    private val enabledPairForWallet: List<PairConfiguration>,
     parent: Logger
 ) {
     private val logger = Logger("[${pairConfiguration.leftRight}]", parent)
@@ -31,7 +32,8 @@ class WalletPairManager(
         publicApi = publicApi,
         privateApi = privateApi,
         pairConfiguration = pairConfiguration,
-        logger = Logger("  ", logger)
+        logger = Logger("  ", logger),
+        enabledPairForWallet = enabledPairForWallet,
     )
     private val trend = Trend(
         pairConfiguration,

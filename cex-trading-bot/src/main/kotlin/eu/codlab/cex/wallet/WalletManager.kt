@@ -1,5 +1,6 @@
 package eu.codlab.cex.wallet
 
+import eu.codlab.cex.PairConfiguration
 import eu.codlab.cex.Pairs
 import eu.codlab.cex.spot.trading.IPrivateApi
 import eu.codlab.cex.spot.trading.IPublicApi
@@ -10,6 +11,7 @@ class WalletManager(
     private val wallet: String,
     private val publicApi: IPublicApi,
     private val privateApi: IPrivateApi,
+    private val enabledPairForWallet: List<PairConfiguration>,
     parent: Logger
 ) {
     private val logger = Logger("[$wallet] ", parent)
@@ -20,7 +22,8 @@ class WalletManager(
             publicApi,
             privateApi,
             pairConfiguration,
-            logger
+            enabledPairForWallet,
+            logger,
         )
     }
 

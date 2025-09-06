@@ -4,7 +4,6 @@ import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.RoundingMode
 import com.ionspin.kotlin.bignum.decimal.toBigDecimal
 import eu.codlab.cex.PairConfiguration
-import eu.codlab.cex.Pairs
 import eu.codlab.cex.database.orders.Order
 import eu.codlab.cex.spot.trading.IPrivateApi
 import eu.codlab.cex.spot.trading.IPublicApi
@@ -28,6 +27,7 @@ class BuyOrder(
     private val publicApi: IPublicApi,
     private val privateApi: IPrivateApi,
     private val pairConfiguration: PairConfiguration,
+    private val enabledPairForWallet: List<PairConfiguration>,
     private val logger: Logger
 ) : Logic<Order?> {
     @Suppress("LongMethod", "ReturnCount", "MagicNumber")
@@ -197,7 +197,7 @@ class BuyOrder(
     }
 
     private fun computeExpectedWeight() = EnvToBuyAsset(
-        totalWeight = Pairs.sumOf { pair -> pair.balanceWeightUsed },
+        totalWeight = enabledPairForWallet.sumOf { pair -> pair.balanceWeightUsed },
         currentWeight = pairConfiguration.balanceWeightUsed,
         minimumValueInCurrency = pairConfiguration.minimumBalanceUsed
     )

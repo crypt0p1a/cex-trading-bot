@@ -1,5 +1,7 @@
 package eu.codlab.cex.wallet
 
+import eu.codlab.cex.PairConfiguration
+import eu.codlab.cex.Pairs
 import eu.codlab.cex.spot.trading.IPrivateApi
 import eu.codlab.cex.spot.trading.IPublicApi
 import eu.codlab.cex.spot.trading.groups.account.balance.AccountStatusRequest
@@ -10,7 +12,8 @@ import kotlin.time.Duration.Companion.minutes
 class WalletsManager(
     private val publicApi: IPublicApi,
     private val privateApi: IPrivateApi,
-    private val excludedWallets: List<String> = emptyList()
+    private val excludedWallets: List<String> = emptyList(),
+    private val enabledPairsForWallets: Map<String, List<PairConfiguration>> = emptyMap()
 ) : ILoopTicker {
     private val logger = Logger("[WALLETS]")
     override val tickDelay = 5.minutes
@@ -29,6 +32,7 @@ class WalletsManager(
                         wallet,
                         publicApi,
                         privateApi,
+                        enabledPairForWallet = enabledPairsForWallets[wallet] ?: Pairs,
                         logger
                     )
                 }
