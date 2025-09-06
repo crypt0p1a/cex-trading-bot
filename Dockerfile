@@ -1,7 +1,11 @@
 # ---- Build Stage ----
 # Use an official Gradle image with a compatible JDK.
 # Make sure this JDK version is compatible with your project's requirements.
-FROM gradle:jdk21 AS builder
+
+ARG ARCH="arm64v8"
+# ARCH can be amd64, winamd64 etc...
+
+FROM ${ARCH}/gradle:jdk21 AS builder
 
 # Set the working directory
 WORKDIR /home/gradle/project
@@ -28,7 +32,7 @@ RUN chmod +x ./gradlew
 RUN ./gradlew :cex-trading-bot:distZip
 
 # ---- Runtime Stage ----
-FROM eclipse-temurin:21-jdk-alpine
+FROM ${ARCH}/eclipse-temurin:21-jdk-alpine
 
 WORKDIR /app
 
