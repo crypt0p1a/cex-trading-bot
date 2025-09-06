@@ -32,6 +32,11 @@ class BuyOrder(
 ) : Logic<Order?> {
     @Suppress("LongMethod", "ReturnCount", "MagicNumber")
     override suspend fun execute(previous: Order?, trend: Directions) {
+        if (!enabledPairForWallet.any { it.leftRight == pairConfiguration.leftRight }) {
+            logger.log("pair disabled")
+            return
+        }
+
         if (!canContinueBuyOrderLogic(previous)) {
             logger.log("need to wait order timeout")
             return
