@@ -9,6 +9,8 @@ services:
       - CEX_API_KEY=${CEX_API_KEY}
       - CEX_API_SECRET=${CEX_API_SECRET}
       - CEX_EXCLUDED_WALLETS=${CEX_EXCLUDED_WALLETS}
+      - CEX_WALLETS_ENABLED_SYMBOLS=${CEX_WALLETS_ENABLED_SYMBOLS}
+      - SENTRY_DSN=${SENTRY_DSN}
       - TRADING_DB_PATH=/data/tradingdb
     logging:
       driver: "json-file"
