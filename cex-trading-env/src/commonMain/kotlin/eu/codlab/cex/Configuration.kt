@@ -45,7 +45,7 @@ data class Configuration(
             if (value == null || value.isBlank()) return emptyMap()
 
             return value.split(";").associate {
-                val (name, list) = it.split("=")
+                val (name, list) = it.split(":")
                 name to list.split(",").map { name ->
                     Symbol.entries.first { symbol -> symbol.name == name }
                 }

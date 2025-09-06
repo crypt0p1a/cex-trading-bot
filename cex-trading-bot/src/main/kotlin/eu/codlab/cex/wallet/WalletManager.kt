@@ -1,7 +1,6 @@
 package eu.codlab.cex.wallet
 
 import eu.codlab.cex.PairConfiguration
-import eu.codlab.cex.Pairs
 import eu.codlab.cex.spot.trading.IPrivateApi
 import eu.codlab.cex.spot.trading.IPublicApi
 import eu.codlab.cex.wallet.logic.AccountValue
@@ -15,8 +14,7 @@ class WalletManager(
     parent: Logger
 ) {
     private val logger = Logger("[$wallet] ", parent)
-    private val pairs = Pairs
-    private val pairManagers = pairs.map { pairConfiguration ->
+    private val pairManagers = enabledPairForWallet.map { pairConfiguration ->
         WalletPairManager(
             wallet,
             publicApi,
@@ -40,7 +38,7 @@ class WalletManager(
         pairManagers.forEach { it.tick() }
 
         try {
-            val expectedValues = accountValue.execute(pairs)
+            val expectedValues = accountValue.execute(enabledPairForWallet)
             logger.log(" $wallet expected value ${expectedValues.toStringExpanded()}")
         } catch (_: Throwable) {
             // until stability is checked and Sentry plugged in, just skip

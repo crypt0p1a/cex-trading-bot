@@ -75,7 +75,15 @@ class BuyOrder(
 
         val calculatedAmountToConsume =
             currentWalletValue.divide(info.totalWeight.toBigDecimal(), DecimalModeDivide)
-                .multiply(info.currentWeight.toBigDecimal())
+                .multiply(info.currentWeight.toBigDecimal()).let { calculated ->
+                    if (calculated > availableBalance) {
+                        logger.log("falling back to the availableBalance of ${availableBalance.toPlainString()}")
+                        availableBalance
+                    } else {
+                        calculated
+                    }
+                }
+
 
         val minimumAmountToConsume = info.minimumValueInCurrency.toBigDecimal()
 
