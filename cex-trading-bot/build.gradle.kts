@@ -22,7 +22,6 @@ dependencies {
 
     api(additionals.multiplatform.file.access)
 
-    api(libs.sentry)
     testApi(kotlin("test"))
 
     api(additionals.kotlinx.coroutines.jvm)

@@ -1,13 +1,11 @@
 [versions]
 androidxRoom = "2.7.0"
 sqlite = "2.4.0"
-sentry = "0.7.1"
 cex-spot-trading = "0.0.4-alpha11"
 bignum = "0.3.10"
 ta4j = "0.15"
 
 [libraries]
-sentry = { module = "io.sentry:sentry-kotlin-multiplatform", version.ref = "sentry" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidxRoom" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidxRoom" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }

@@ -14,7 +14,7 @@ import kotlin.time.Duration.Companion.minutes
 
 fun main() {
     runBlocking {
-        val configuration = Configuration.load()
+        val configuration = Environment.init()
         val publicApi = PublicApi()
         val privateApi = PrivateApi(
             apiKey = configuration.apiKey,

@@ -1,6 +1,7 @@
 package eu.codlab.cex.wallet
 
 import eu.codlab.cex.PairConfiguration
+import eu.codlab.cex.Sentry
 import eu.codlab.cex.database.Database
 import eu.codlab.cex.database.orders.Order
 import eu.codlab.cex.database.orders.OrderSide
@@ -167,12 +168,12 @@ class WalletPairManager(
     private suspend fun manageOrderToBuy(
         previousOrder: Order? = null,
         trend: Directions = Directions.INVALID
-    ) = try {
-        logger.log("manageOrderToBuy with previous order : $previousOrder")
-        buyer.execute(previousOrder, trend)
-        synchronizeOrders(pairConfiguration)
-    } catch (err: Throwable) {
-        // TODO sentry
+    ) {
+        Sentry.trySuspend {
+            logger.log("manageOrderToBuy with previous order : $previousOrder")
+            buyer.execute(previousOrder, trend)
+            synchronizeOrders(pairConfiguration)
+        }
     }
 
     private suspend fun checkOrderState(order: Order) {
@@ -202,19 +203,13 @@ class WalletPairManager(
 
     @Suppress("TooGenericExceptionCaught", "SwallowedException")
     private suspend fun manageOrderFilled(order: Order, trend: Directions) {
-        try {
+        Sentry.trySuspend {
             logger.log("manageOrderFilled ${order.orderId}")
             sell.execute(order, trend)
             synchronizeOrders(pairConfiguration)
-        } catch (err: Throwable) {
-            // TODO sentry
         }
     }
 
-    private suspend fun trend() = try {
-        trend.execute()
-    } catch (err: Throwable) {
-        err.printStackTrace()
-        Directions.INVALID
-    }
+    private suspend fun trend(): Directions =
+        Sentry.trySuspend { trend.execute() } ?: Directions.INVALID
 }

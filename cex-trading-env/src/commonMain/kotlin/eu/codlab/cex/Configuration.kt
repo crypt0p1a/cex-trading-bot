@@ -6,7 +6,8 @@ data class Configuration(
     val apiKey: String,
     val apiSecret: String,
     val excludedWallets: List<String>,
-    val enabledSymbolsForWallets: Map<String, List<Symbol>> = emptyMap()
+    val enabledSymbolsForWallets: Map<String, List<Symbol>> = emptyMap(),
+    val sentryDsn: String? = null
 ) {
     val enabledPairsForWallets: Map<String, List<PairConfiguration>>
         get() = enabledSymbolsForWallets.map { (key, value) ->
@@ -14,7 +15,7 @@ data class Configuration(
         }.toMap()
 
     companion object {
-        suspend fun load(): Configuration {
+        internal suspend fun load(): Configuration {
             val env = VirtualFile(VirtualFile.Root, ".env")
 
             return if (env.exists()) {
@@ -27,8 +28,8 @@ data class Configuration(
                     apiKey = map["CEX_API_KEY"]!!,
                     apiSecret = map["CEX_API_SECRET"]!!,
                     excludedWallets = map["CEX_EXCLUDED_WALLETS"]?.split(",") ?: emptyList(),
-                    enabledSymbolsForWallets = extract(map["CEX_WALLETS_ENABLED_SYMBOLS"])
-
+                    enabledSymbolsForWallets = extract(map["CEX_WALLETS_ENABLED_SYMBOLS"]),
+                    sentryDsn = map["SENTRY_DSN"]
                 )
             } else {
                 Configuration(
@@ -36,7 +37,8 @@ data class Configuration(
                     apiSecret = System.getenv("CEX_API_SECRET"),
                     excludedWallets = System.getenv()["CEX_EXCLUDED_WALLETS"]?.split(",")
                         ?: emptyList(),
-                    enabledSymbolsForWallets = extract(System.getenv()["CEX_WALLETS_ENABLED_SYMBOLS"])
+                    enabledSymbolsForWallets = extract(System.getenv()["CEX_WALLETS_ENABLED_SYMBOLS"]),
+                    sentryDsn = System.getenv()["SENTRY_DSN"]
                 )
             }
         }

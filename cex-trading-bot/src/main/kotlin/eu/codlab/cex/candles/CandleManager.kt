@@ -2,6 +2,7 @@ package eu.codlab.cex.candles
 
 import eu.codlab.cex.PairConfiguration
 import eu.codlab.cex.Pairs
+import eu.codlab.cex.Sentry
 import eu.codlab.cex.database.Database
 import eu.codlab.cex.spot.trading.PublicApi
 import eu.codlab.cex.spot.trading.groups.candles.Candle
@@ -17,7 +18,7 @@ class CandleManager(
     private val publicApi: PublicApi,
 ) : ILoopTicker {
     private suspend fun managePair(pairConfiguration: PairConfiguration) {
-        try {
+        Sentry.trySuspend {
             val hasLast = Database.candles.getDesc(
                 pairConfiguration.left,
                 pairConfiguration.right
@@ -36,7 +37,7 @@ class CandleManager(
 
             if (candles.isEmpty()) {
                 println("candle is invalid for ${pairConfiguration.leftRight}")
-                return
+                return@trySuspend
             }
 
             if (hasLast) {
@@ -44,8 +45,6 @@ class CandleManager(
             } else {
                 candles.forEach { insertOrUpdate(pairConfiguration, it) }
             }
-        } catch (err: Throwable) {
-            err.printStackTrace()
         }
     }
 

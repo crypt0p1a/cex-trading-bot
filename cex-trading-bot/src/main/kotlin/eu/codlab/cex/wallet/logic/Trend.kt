@@ -20,9 +20,7 @@ class Trend(
             return Directions.INVALID
         }
 
-        return predict.predictWithTa4j(getCandles().map { it.toBar5m() }).also {
-            logger.log("   and better prediction is $it")
-        }
+        return predict.predictWithTa4j(getCandles().map { it.toBar5m() })
     }
 
     private suspend fun getCandles() =

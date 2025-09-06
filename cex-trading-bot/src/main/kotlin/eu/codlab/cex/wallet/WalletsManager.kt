@@ -2,6 +2,7 @@ package eu.codlab.cex.wallet
 
 import eu.codlab.cex.PairConfiguration
 import eu.codlab.cex.Pairs
+import eu.codlab.cex.Sentry
 import eu.codlab.cex.spot.trading.IPrivateApi
 import eu.codlab.cex.spot.trading.IPublicApi
 import eu.codlab.cex.spot.trading.groups.account.balance.AccountStatusRequest
@@ -37,11 +38,7 @@ class WalletsManager(
                     )
                 }
 
-                try {
-                    manager.tick()
-                } catch (err: Throwable) {
-                    err.printStackTrace()
-                }
+                Sentry.trySuspend { manager.tick() }
 
                 logger.log("wallet $wallet managed...")
             }

@@ -12,6 +12,7 @@ kotlin {
             dependencies {
                 api(additionals.kotlinx.serialization.json)
                 api(additionals.multiplatform.file.access)
+                implementation(additionals.multiplatform.sentry)
             }
         }
 

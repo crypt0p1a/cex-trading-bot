@@ -1,5 +1,6 @@
 package eu.codlab.cex.utils
 
+import eu.codlab.cex.Sentry
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -18,7 +19,8 @@ class Looper(
 
     private suspend fun CoroutineScope.loop() {
         while (isActive) {
-            loopTicker.tick()
+            Sentry.trySuspend { loopTicker.tick() }
+
             delay(loopTicker.tickDelay)
         }
     }
