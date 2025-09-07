@@ -15,7 +15,7 @@ actual class Predict {
     private fun trend(
         series: BaseBarSeries,
         close: ClosePriceIndicator,
-        vol: VolumeIndicator,
+        vol: VolumeIndicator? = null,
         hours: Int = 1,
     ): Direction {
         val barsPerHour = (60 / 5) // 12 for 5min bars
@@ -23,10 +23,14 @@ actual class Predict {
 
         val smaFast = SMAIndicator(close, window / 4)
         val smaSlow = SMAIndicator(close, window)
-        val volSma = SMAIndicator(vol, window)
+        val volSma = vol?.let { SMAIndicator(it, window) }
 
-        val enterRule = OverIndicatorRule(smaFast, smaSlow).and(OverIndicatorRule(vol, volSma))
-        val exitRule = UnderIndicatorRule(smaFast, smaSlow).and(UnderIndicatorRule(vol, volSma))
+        val enterRule = OverIndicatorRule(smaFast, smaSlow).let { rule ->
+            volSma?.let { rule.and(OverIndicatorRule(vol, volSma)) } ?: rule
+        }
+        val exitRule = UnderIndicatorRule(smaFast, smaSlow).let { rule ->
+            volSma?.let { rule.and(UnderIndicatorRule(vol, volSma)) } ?: rule
+        }
 
         val i = series.endIndex
         return when {
@@ -41,6 +45,8 @@ actual class Predict {
     @OptIn(ExperimentalTime::class)
     actual fun predictWithTa4j(bars: List<Bar5m>): Directions {
         val series = BaseBarSeriesBuilder().withName("5m").build()
+        // note : we won't use the volume for now
+        val useVolume = false // bars.filter { it.volume != 0.0 }.size > bars.size * 0.95
 
         bars.forEach {
             series.addBar(
@@ -53,13 +59,19 @@ actual class Predict {
                     .highPrice(it.highPrice)
                     .lowPrice(it.lowPrice)
                     .closePrice(it.closePrice)
-                    .volume(it.volume)
+                    .let { creation ->
+                        if (useVolume) {
+                            creation.volume(it.volume)
+                        } else {
+                            creation
+                        }
+                    }
                     .build()
             )
         }
 
         val close = ClosePriceIndicator(series)
-        val vol = VolumeIndicator(series)
+        val vol = if (useVolume) VolumeIndicator(series) else null
 
         return Directions(
             direction3h = trend(series, close, vol, 3),
