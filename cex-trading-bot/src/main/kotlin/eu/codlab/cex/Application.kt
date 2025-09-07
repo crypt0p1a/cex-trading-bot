@@ -5,8 +5,6 @@ import eu.codlab.cex.spot.trading.PrivateApi
 import eu.codlab.cex.spot.trading.PublicApi
 import eu.codlab.cex.ticks.TickManager
 import eu.codlab.cex.utils.Looper
-import eu.codlab.cex.utils.WrappedPrivateApi
-import eu.codlab.cex.utils.WrappedPublicApi
 import eu.codlab.cex.wallet.WalletsManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -31,8 +29,8 @@ fun main() {
 
         val walletsManager = Looper(
             WalletsManager(
-                publicApi = WrappedPublicApi(publicApi),
-                privateApi = WrappedPrivateApi(privateApi),
+                publicApi = publicApi,
+                privateApi = privateApi,
                 excludedWallets = configuration.excludedWallets,
                 enabledPairsForWallets = configuration.enabledPairsForWallets
             )

@@ -1,7 +1,7 @@
 [versions]
 androidxRoom = "2.7.0"
 sqlite = "2.4.0"
-cex-spot-trading = "0.0.4-alpha11"
+cex-spot-trading = "0.0.4-alpha12"
 bignum = "0.3.10"
 ta4j = "0.15"
 
