@@ -42,8 +42,9 @@ class BuyOrder(
             return
         }
 
-        if (trend.isDown) {
-            logger.log("skipping buy order, trending is down ($trend)")
+        if (!trend.isDown) {
+            logger.log("skipping buy order, trending is not really down ($trend)")
+            logger.log("  we'll wait that we can expect a buy order to pass in a down ctx")
             return
         }
 
