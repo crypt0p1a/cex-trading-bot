@@ -18,6 +18,7 @@ import eu.codlab.cex.wallet.logic.SellOrder
 import eu.codlab.cex.wallet.logic.Trend
 import korlibs.time.DateTime
 import korlibs.time.days
+import korlibs.time.months
 
 class WalletPairManager(
     private val wallet: String,
@@ -159,8 +160,8 @@ class WalletPairManager(
                 pair = pair.leftRight,
                 accountIds = listOf(wallet),
                 archived = true,
-                serverCreateTimestampTo = DateTime.now().minus(1.days).unixMillisLong,
-                serverCreateTimestampFrom = DateTime.now().unixMillisLong
+                serverCreateTimestampFrom = DateTime.now().minus(10.months).unixMillisLong,
+                serverCreateTimestampTo = DateTime.now().unixMillisLong
             )
         ).firstOrNull()
 
@@ -187,7 +188,7 @@ class WalletPairManager(
             ?.copy(id = order.id)
             ?: throw NullPointerException(
                 "Couldn't find the order ${order.clientOrderId}" +
-                        "even in the archive"
+                        " even in the archive"
             )
         // if not found -> it was canceled ? but we normally get the archived
 
