@@ -32,14 +32,45 @@ actual class Predict {
             volSma?.let { rule.and(UnderIndicatorRule(vol, volSma)) } ?: rule
         }
 
+
         val i = series.endIndex
+
         return when {
             enterRule.isSatisfied(i) -> Direction.UP
             exitRule.isSatisfied(i) -> Direction.DOWN
-            else -> if (close.getValue(i)
-                    .isGreaterThan(close.getValue(i - 1))
-            ) Direction.UP else Direction.DOWN
+            isFlat(series, window, close, smaSlow, smaFast, i) -> Direction.FLAT
+            close.getValue(i).isGreaterThan(close.getValue(i - 1)) -> Direction.UP
+            else -> Direction.DOWN
         }
+    }
+
+    private fun isFlat(
+        series: BaseBarSeries,
+        window: Int,
+        close: ClosePriceIndicator,
+        smaSlow: SMAIndicator,
+        smaFast: SMAIndicator,
+        lastIndex: Int
+    ): Boolean {
+        // ---- FLAT tolerance -----------------------------------------------------
+        // Base tolerance as a % of price
+        val pctTol = DecimalNum.valueOf(0.02) // 2%
+        val priceTol = close.getValue(lastIndex).multipliedBy(pctTol)
+
+        // ATR-based component (adaptive). Optional.
+        val atrWindow = maxOf(14, window / 2)
+        val atr = org.ta4j.core.indicators.ATRIndicator(series, atrWindow)
+        val atrWeight = DecimalNum.valueOf(0.25) // 25% of ATR
+        val atrTol = atr.getValue(lastIndex).multipliedBy(atrWeight)
+
+        // Final tolerance = max(price% tolerance, ATR-based tolerance)
+        val tol = if (priceTol.isGreaterThan(atrTol)) priceTol else atrTol
+
+        // Spread between fast/slow SMAs and last-bar absolute price change
+        val smaSpread = smaFast.getValue(lastIndex).minus(smaSlow.getValue(lastIndex)).abs()
+        val lastMove = close.getValue(lastIndex).minus(close.getValue(lastIndex - 1)).abs()
+
+        return smaSpread.isLessThan(tol) && lastMove.isLessThan(tol)
     }
 
     @OptIn(ExperimentalTime::class)
@@ -75,7 +106,8 @@ actual class Predict {
 
         return Directions(
             direction3h = trend(series, close, vol, 3),
-            direction12h = trend(series, close, vol, 12)
+            direction12h = trend(series, close, vol, 12),
+            direction24h = trend(series, close, vol, 24)
         )
     }
 }
