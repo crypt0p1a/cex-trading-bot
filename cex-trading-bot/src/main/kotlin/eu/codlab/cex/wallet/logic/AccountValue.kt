@@ -34,8 +34,9 @@ class AccountValue(
 
         // extract every LEFT currency value
         val fromLeftCurrenciesOnly = pairConfigurations.map { pair ->
-            val balance = walletBalance[pair.left.name]!!
-            expectedValue(balance, pair, tickers[pair.leftRight]!!)
+            walletBalance[pair.left.name]?.let { balance ->
+                expectedValue(balance, pair, tickers[pair.leftRight]!!)
+            } ?: BigDecimal.ZERO
         }
 
         assert(setOfRightCurrencies.isEmpty())
