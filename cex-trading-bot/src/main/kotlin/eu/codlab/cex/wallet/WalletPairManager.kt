@@ -206,7 +206,11 @@ class WalletPairManager(
     private suspend fun manageOrderFilled(order: Order, trend: Directions) {
         Sentry.trySuspend {
             logger.log("manageOrderFilled ${order.orderId}")
-            sell.execute(order, trend)
+            when (order.side) {
+                OrderSide.BUY -> sell.execute(order, trend)
+                OrderSide.SELL -> buyer.execute(order, trend)
+            }
+
             synchronizeOrders(pairConfiguration)
         }
     }
