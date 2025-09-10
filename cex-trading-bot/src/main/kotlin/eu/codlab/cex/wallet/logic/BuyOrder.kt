@@ -42,11 +42,17 @@ class BuyOrder(
             return
         }
 
+        /*
+        // we actually don't want to do this as it would be problematic actually
+        // Note : improvement could be to just don't try to make a buy attempt in a window :
+        // for instance the time interval between the "we can buy" up to 2h max and then pass it
+        // anyway
         if (!trend.isDown) {
             logger.log("skipping buy order, trending is not really down ($trend)")
             logger.log("  we'll wait that we can expect a buy order to pass in a down ctx")
             return
         }
+        */
 
         val currentWallet = privateApi.getMyAccountStatus(
             AccountStatusRequest(
