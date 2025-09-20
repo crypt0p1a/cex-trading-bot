@@ -153,20 +153,29 @@ class BuyOrder(
         assert(priceBuy < mean)
         assert(priceBuyRounded < mean)
 
-        // take a lower part of the amount to buy (-> buy 99%)
-        val opponentFeeRatio = 0.99
-        val amountToBuy = amount.divide(priceBuy, DecimalModeDivide)
-            .multiply(BigDecimal.fromDouble(opponentFeeRatio))
-        val amountToBuyRounded = amountToBuy.roundToDigitPositionAfterDecimalPoint(
-            pairInfo.basePrecision.toLong(),
-            RoundingMode.FLOOR
-        )
+        val amountToBuyRounded = when (pairConfiguration.configuration) {
+            // absolute won't be affected by the fees right now
+            is BuySellConfiguration.Absolute -> amount
+            // take a lower part of the amount (-> buy 99%) TODO future needs to manage fees instead
+            is BuySellConfiguration.Ratio -> {
+                val opponentFeeRatio = 0.99
+                val amountToBuy = amount.divide(priceBuy, DecimalModeDivide)
+                    .multiply(BigDecimal.fromDouble(opponentFeeRatio))
+
+                logger.log("amountToBuy        -> ${amountToBuy.toStringExpanded()}")
+
+                amountToBuy.roundToDigitPositionAfterDecimalPoint(
+                    pairInfo.basePrecision.toLong(),
+                    RoundingMode.FLOOR
+                )
+            }
+        }
+
 
         val amountToBuyAdjustedMultiple = amountToBuyRounded.findNearestMultiple(
             pairInfo.baseLotSize.toBigDecimal()
         )
 
-        logger.log("amountToBuy        -> ${amountToBuy.toStringExpanded()}")
         logger.log("amountToBuyRounded -> ${amountToBuyRounded.toStringExpanded()}")
         logger.log("  now comparing with baseLotSize ${pairInfo.baseLotSize}")
         logger.log("amountToBuyAdjustedMultiple -> ${amountToBuyAdjustedMultiple.toStringExpanded()}")
