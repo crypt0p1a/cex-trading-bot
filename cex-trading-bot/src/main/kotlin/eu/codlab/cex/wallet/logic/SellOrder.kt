@@ -2,6 +2,7 @@ package eu.codlab.cex.wallet.logic
 
 import com.ionspin.kotlin.bignum.decimal.RoundingMode
 import eu.codlab.cex.PairConfiguration
+import eu.codlab.cex.configuration.BuySellConfiguration
 import eu.codlab.cex.database.orders.Order
 import eu.codlab.cex.spot.trading.IPrivateApi
 import eu.codlab.cex.spot.trading.IPublicApi
@@ -29,14 +30,18 @@ class SellOrder(
         // we originally set priceToBuy = mean * buyCoef
         // so we need to invert this
 
-        val originalAmountRight = previous.requestedAmountCcy1!!.multiply(buyPrice)
-            .divide(pairConfiguration.buyCoef.toBigDecimal(), DecimalModeDivide)
+        val conf = pairConfiguration.configuration
 
-        val originalPrice =
-            buyPrice.divide(pairConfiguration.buyCoef.toBigDecimal(), DecimalModeDivide)
-        val sellPrice = originalPrice.multiply(pairConfiguration.sellCoef.toBigDecimal())
+        val sellPrice = when (conf) {
+            is BuySellConfiguration.Absolute -> conf.sellAt.toBigDecimal()
+            is BuySellConfiguration.Ratio -> {
 
-        logger.log("originalAmountRight ${originalAmountRight.toPlainString()}")
+                val originalPrice =
+                    buyPrice.divide(conf.buyCoef.toBigDecimal(), DecimalModeDivide)
+                originalPrice.multiply(conf.sellCoef.toBigDecimal())
+            }
+        }
+
         logger.log("buyPrice ${buyPrice.toPlainString()}")
 
         if (sellPrice < buyPrice) {
@@ -75,7 +80,7 @@ class SellOrder(
                 price = sellAt.toStringExpanded(),
                 comment = "priceSell[${sellAt.toStringExpanded()}]" +
                         "amountSell[$requestedAmountCcy1] " +
-                        "sellCoef[${pairConfiguration.sellCoef}]",
+                        pairConfiguration.configuration.toStringSell(),
                 timeInForce = TimeInForce.GTC
             ).also {
                 logger.log("new order : $it")

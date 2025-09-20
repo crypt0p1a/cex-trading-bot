@@ -4,6 +4,7 @@ import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.RoundingMode
 import com.ionspin.kotlin.bignum.decimal.toBigDecimal
 import eu.codlab.cex.PairConfiguration
+import eu.codlab.cex.configuration.BuySellConfiguration
 import eu.codlab.cex.database.orders.Order
 import eu.codlab.cex.spot.trading.IPrivateApi
 import eu.codlab.cex.spot.trading.IPublicApi
@@ -135,7 +136,11 @@ class BuyOrder(
         val mean = contextPair.last.toBigDecimal()
             .plus(contextPair.high.toBigDecimal()).divide(2.0.toBigDecimal(), DecimalModeDivide)
 
-        val priceBuy = mean.multiply(pairConfiguration.buyCoef.toBigDecimal())
+        val conf = pairConfiguration.configuration
+        val priceBuy = when (conf) {
+            is BuySellConfiguration.Absolute -> conf.buyAt.toBigDecimal()
+            is BuySellConfiguration.Ratio -> mean.multiply(conf.buyCoef.toBigDecimal())
+        }
 
         val priceBuyRounded = priceBuy.roundToDigitPositionAfterDecimalPoint(
             pairInfo.pricePrecision.toLong(),
@@ -201,7 +206,7 @@ class BuyOrder(
                 comment = "consume[${amount.toStringExpanded()}] " +
                         "priceBuy[${priceBuyRounded.toStringExpanded()}]" +
                         "amountBuy[${amountToBuyAdjustedMultiple.toStringExpanded()}] " +
-                        "buyCoef[${pairConfiguration.buyCoef}]",
+                        pairConfiguration.configuration.toStringBuy(),
                 timeInForce = TimeInForce.GTD,
                 expireTime = expireTime.format(expireTimeFormat),
             ).also { logger.log("$it") }
