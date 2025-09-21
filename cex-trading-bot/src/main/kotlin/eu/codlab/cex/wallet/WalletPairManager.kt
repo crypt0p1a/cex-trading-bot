@@ -96,11 +96,19 @@ class WalletPairManager(
             }
 
             OrderStatus.CANCELLED -> {
-                if (order.side == OrderSide.SELL) {
-                    throw IllegalStateException("Order ${order.orderId} has been cancelled but was selling ?")
+                // try to fetch last buy order...
+                val actualPrevious = if (order.side == OrderSide.SELL) {
+                    Database.orders.getAll(wallet, left, right)
+                        .filter { it.status == OrderStatus.NEW && it.side == OrderSide.BUY }
+                        .maxByOrNull { it.clientCreateTimestamp }
+                        ?: throw IllegalStateException(
+                            "Order ${order.orderId} has been cancelled but was selling without buying ?"
+                        )
+                } else {
+                    order
                 }
 
-                manageOrderToBuy(order, trend)
+                manageOrderToBuy(actualPrevious, trend)
             }
         }
     }
