@@ -8,7 +8,7 @@ val Pairs = listOf(
         right = Symbol.USD,
         configuration = BuySellConfiguration.Absolute(
             buyAt = 0.9999,
-            sellAt = 1.001,
+            sellAt = 1.0001,
         ),
     ),
     PairConfiguration(
