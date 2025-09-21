@@ -99,7 +99,7 @@ class WalletPairManager(
                 // try to fetch last buy order...
                 val actualPrevious = if (order.side == OrderSide.SELL) {
                     Database.orders.getAll(wallet, left, right)
-                        .filter { it.status == OrderStatus.NEW && it.side == OrderSide.BUY }
+                        .filter { it.side == OrderSide.BUY }
                         .maxByOrNull { it.clientCreateTimestamp }
                         ?: throw IllegalStateException(
                             "Order ${order.orderId} has been cancelled but was selling without buying ?"
