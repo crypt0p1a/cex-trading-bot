@@ -12,5 +12,7 @@ enum class Symbol {
     LTC,
     XRP,
     ETHFI,
+    SOL,
     USDC,
+
 }
