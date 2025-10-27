@@ -7,8 +7,8 @@ val Pairs = listOf(
         left = Symbol.BTC,
         right = Symbol.USD,
         configuration = BuySellConfiguration.Ratio(
-            buyCoef = 0.992,
-            sellCoef = 1.01,
+            buyCoef = 0.994,
+            sellCoef = 1.006,
         ),
     ),
     PairConfiguration(
@@ -55,8 +55,8 @@ val Pairs = listOf(
         left = Symbol.SOL,
         right = Symbol.USD,
         configuration = BuySellConfiguration.Ratio(
-            buyCoef = 0.992,
-            sellCoef = 1.01,
+            buyCoef = 0.995,
+            sellCoef = 1.005,
         ),
     ),
 )
