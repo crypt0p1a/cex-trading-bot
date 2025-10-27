@@ -54,9 +54,9 @@ val Pairs = listOf(
     PairConfiguration(
         left = Symbol.SOL,
         right = Symbol.USD,
-        configuration = BuySellConfiguration.Absolute(
-            buyAt = 0.992,
-            sellAt = 1.01,
+        configuration = BuySellConfiguration.Ratio(
+            buyCoef = 0.992,
+            sellCoef = 1.01,
         ),
     ),
 )
