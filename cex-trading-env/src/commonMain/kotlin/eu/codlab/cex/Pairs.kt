@@ -5,7 +5,7 @@ import eu.codlab.cex.configuration.FallbackStrategy
 
 val defaultFallbackStrategy = FallbackStrategy(
     buy = FallbackStrategy.BuyStrategy(
-        pairMinRatio = 1.2 /* will use min + 20% */
+        pairMinRatio = 1.1 /* will use min + 10% */
     )
 )
 
