@@ -13,6 +13,7 @@ import eu.codlab.cex.spot.trading.groups.orders.OrderType
 import eu.codlab.cex.spot.trading.groups.orders.news.NewOrder
 import eu.codlab.cex.spot.trading.groups.orders.news.NewOrderAnswer
 import eu.codlab.cex.spot.trading.groups.orders.news.TimeInForce
+import eu.codlab.cex.spot.trading.groups.pairsinfo.PairInfo
 import eu.codlab.cex.tools.extrapolate.Directions
 import eu.codlab.cex.utils.DecimalModeDivide
 import eu.codlab.cex.utils.expireTimeFormat
@@ -153,32 +154,7 @@ class BuyOrder(
         assert(priceBuy < mean)
         assert(priceBuyRounded < mean)
 
-        val amountToBuyRounded = when (pairConfiguration.configuration) {
-            // absolute won't be affected by the fees right now
-            is BuySellConfiguration.Absolute -> amount
-            // take a lower part of the amount (-> buy 99%) TODO future needs to manage fees instead
-            is BuySellConfiguration.Ratio -> {
-                val opponentFeeRatio = 0.99
-                val amountToBuy = amount.divide(priceBuy, DecimalModeDivide)
-                    .multiply(BigDecimal.fromDouble(opponentFeeRatio))
-
-                logger.log("amountToBuy        -> ${amountToBuy.toStringExpanded()}")
-
-                amountToBuy.roundToDigitPositionAfterDecimalPoint(
-                    pairInfo.basePrecision.toLong(),
-                    RoundingMode.FLOOR
-                )
-            }
-        }
-
-
-        val amountToBuyAdjustedMultiple = amountToBuyRounded.findNearestMultiple(
-            pairInfo.baseLotSize.toBigDecimal()
-        )
-
-        logger.log("amountToBuyRounded -> ${amountToBuyRounded.toStringExpanded()}")
-        logger.log("  now comparing with baseLotSize ${pairInfo.baseLotSize}")
-        logger.log("amountToBuyAdjustedMultiple -> ${amountToBuyAdjustedMultiple.toStringExpanded()}")
+        val amountToBuyAdjustedMultiple = computeAmountToBuy(amount, priceBuy, pairInfo)
 
         if (amountToBuyAdjustedMultiple == BigDecimal.ZERO) {
             logger.log("can't buy ${pairConfiguration.leftRight}, amount would be 0")
@@ -187,7 +163,7 @@ class BuyOrder(
 
         if (amountToBuyAdjustedMultiple < pairInfo.baseMin) {
             logger.log(
-                "can't buy ${pairConfiguration.leftRight}, amount ${amountToBuyRounded.toStringExpanded()}" +
+                "can't buy ${pairConfiguration.leftRight}, amount ${amountToBuyAdjustedMultiple.toStringExpanded()}" +
                         "is inferior to ${pairInfo.baseMin}"
             )
             return
@@ -228,6 +204,55 @@ class BuyOrder(
             logger.log("    order attempt -> $order")
             return
         }
+    }
+
+    private fun computeAmountToBuy(
+        amount: BigDecimal,
+        priceBuy: BigDecimal,
+        pairInfo: PairInfo
+    ): BigDecimal {
+        val amountToBuyRounded = when (pairConfiguration.configuration) {
+            // absolute won't be affected by the fees right now
+            is BuySellConfiguration.Absolute -> amount
+            // take a lower part of the amount (-> buy 99%) TODO future needs to manage fees instead
+            is BuySellConfiguration.Ratio -> {
+                val opponentFeeRatio = 0.99
+                val amountToBuy = amount.divide(priceBuy, DecimalModeDivide)
+                    .multiply(BigDecimal.fromDouble(opponentFeeRatio))
+
+                logger.log("amountToBuy        -> ${amountToBuy.toStringExpanded()}")
+
+                amountToBuy.roundToDigitPositionAfterDecimalPoint(
+                    pairInfo.basePrecision.toLong(),
+                    RoundingMode.FLOOR
+                )
+            }
+        }
+
+        val adjusted = amountToBuyRounded.findNearestMultiple(
+            pairInfo.baseLotSize.toBigDecimal()
+        )
+
+        logger.log("amountToBuyRounded -> ${amountToBuyRounded.toStringExpanded()}")
+        logger.log("  now comparing with baseLotSize ${pairInfo.baseLotSize}")
+        logger.log("amountToBuyAdjustedMultiple -> ${adjusted.toStringExpanded()}")
+
+        if (adjusted < pairInfo.baseMin) {
+            val (ratio) = pairConfiguration.fallbackStrategy.buy
+
+            if (null == ratio || ratio < 1) return adjusted
+
+            // in this case, we want to have at list 'baseMin' amount * ratio
+            val fixedAmount = (pairInfo.baseMin * ratio).toBigDecimal().findNearestMultiple(
+                pairInfo.baseLotSize.toBigDecimal()
+            )
+
+            logger.log("  amount was invalid, upping it to -> ${fixedAmount.toStringExpanded()}")
+
+            return fixedAmount
+        }
+
+        return adjusted
     }
 
     private fun computeExpectedWeight() = EnvToBuyAsset(

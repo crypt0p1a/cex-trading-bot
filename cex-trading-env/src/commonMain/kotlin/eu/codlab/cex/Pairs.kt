@@ -1,6 +1,13 @@
 package eu.codlab.cex
 
 import eu.codlab.cex.configuration.BuySellConfiguration
+import eu.codlab.cex.configuration.FallbackStrategy
+
+val defaultFallbackStrategy = FallbackStrategy(
+    buy = FallbackStrategy.BuyStrategy(
+        pairMinRatio = 1.2 /* will use min + 20% */
+    )
+)
 
 val Pairs = listOf(
     PairConfiguration(
@@ -10,6 +17,7 @@ val Pairs = listOf(
             buyCoef = 0.994,
             sellCoef = 1.006,
         ),
+        fallbackStrategy = defaultFallbackStrategy
     ),
     PairConfiguration(
         left = Symbol.ETH,
@@ -18,6 +26,7 @@ val Pairs = listOf(
             buyCoef = 0.992,
             sellCoef = 1.01,
         ),
+        fallbackStrategy = defaultFallbackStrategy
     ),
     PairConfiguration(
         left = Symbol.XRP,
@@ -26,6 +35,7 @@ val Pairs = listOf(
             buyCoef = 0.992,
             sellCoef = 1.01,
         ),
+        fallbackStrategy = defaultFallbackStrategy
     ),
     PairConfiguration(
         left = Symbol.LTC,
@@ -34,6 +44,7 @@ val Pairs = listOf(
             buyCoef = 0.992,
             sellCoef = 1.01,
         ),
+        fallbackStrategy = defaultFallbackStrategy
     ),
     PairConfiguration(
         left = Symbol.DOGE,
@@ -42,6 +53,7 @@ val Pairs = listOf(
             buyCoef = 0.992,
             sellCoef = 1.01,
         ),
+        fallbackStrategy = defaultFallbackStrategy
     ),
     PairConfiguration(
         left = Symbol.ETHFI,
@@ -50,6 +62,7 @@ val Pairs = listOf(
             buyCoef = 0.992,
             sellCoef = 1.01,
         ),
+        fallbackStrategy = defaultFallbackStrategy
     ),
     PairConfiguration(
         left = Symbol.SOL,
@@ -58,5 +71,6 @@ val Pairs = listOf(
             buyCoef = 0.995,
             sellCoef = 1.005,
         ),
+        fallbackStrategy = defaultFallbackStrategy
     ),
 )
