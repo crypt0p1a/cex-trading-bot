@@ -24,8 +24,7 @@ fun main() {
         val apiConfiguration = ApiConfiguration(
             rateLimitQueue = RateLimitQueue(
                 coroutineScope,
-                // currently 30 - and by default but maybe actually required to be 20U
-                apiTokenPoolMaximum = 30U
+                apiTokenPoolMaximum = 20U
             )
         )
 
