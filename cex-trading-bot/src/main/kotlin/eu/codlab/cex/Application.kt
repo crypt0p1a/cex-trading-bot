@@ -5,17 +5,16 @@ import eu.codlab.cex.spot.trading.PrivateApi
 import eu.codlab.cex.spot.trading.PublicApi
 import eu.codlab.cex.spot.trading.calls.ApiConfiguration
 import eu.codlab.cex.spot.trading.calls.RateLimitQueue
-import eu.codlab.cex.spot.trading.rest.RestOptions
 import eu.codlab.cex.ticks.TickManager
 import eu.codlab.cex.utils.Looper
 import eu.codlab.cex.wallet.WalletsManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 fun main() {
     runBlocking {
@@ -31,20 +30,13 @@ fun main() {
         )
 
         val publicApi = PublicApi(
-            coroutineScope = coroutineScope,
             apiConfiguration = apiConfiguration
         )
 
         val privateApi = PrivateApi(
-            coroutineScope = coroutineScope,
             apiKey = configuration.apiKey,
             apiSecret = configuration.apiSecret,
             apiConfiguration = apiConfiguration,
-            restOptions = RestOptions(
-                rateLimitLog = { prefix, text ->
-                    println("$prefix: $text")
-                }
-            )
         )
 
         val tickManager = Looper(
@@ -74,6 +66,10 @@ fun main() {
             // nothing
             delay(5.minutes)
         }
+
+        // the following lines aren't called... on purpose
+
+        coroutineScope.cancel()
 
         walletsManager.shutdown()
         publicApi.shutdown()
